@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Details — ShelfSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="book_details.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       LOADING STATE
+       JS: Show this container while the book data is being fetched.
+       Add/remove the class "hidden" or toggle display via JS.
+       ============================================================ -->
+  <!-- <div id="loading-state" class="state-overlay" aria-live="polite" aria-label="Loading book details">
+    <div class="state-card">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="state-message">Loading book details…</p>
+    </div>
+  </div> -->
+
+  <!-- ============================================================
+       ERROR STATE — Book Not Found
+       JS: Show this container when the API returns a 404 or
+       when no book matches the given ID.
+       ============================================================ -->
+  <div id="not-found-state" class="state-overlay hidden" aria-live="assertive">
+    <div class="state-card">
+      <span class="state-icon" aria-hidden="true">📭</span>
+      <h2 class="state-title">Book not found</h2>
+      <p class="state-message">This book may have been removed or the link is incorrect.</p>
+      <!-- JS: Wire up to navigate back to /library -->
+      <a href="#" id="not-found-library-link" class="btn btn-primary">Back to Library</a>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ERROR STATE — Generic Error
+       JS: Show this container for network failures or
+       unexpected server errors. Populate #error-detail with
+       a human-readable message from the error response.
+       ============================================================ -->
+  <div id="error-state" class="state-overlay hidden" aria-live="assertive">
+    <div class="state-card">
+      <span class="state-icon" aria-hidden="true">⚠️</span>
+      <h2 class="state-title">Something went wrong</h2>
+      <p id="error-detail" class="state-message">An unexpected error occurred. Please try again.</p>
+      <button id="error-retry-btn" class="btn btn-primary">Try Again</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       DELETE CONFIRMATION MODAL
+       JS: Toggle the class "hidden" on #delete-modal to show/hide.
+       Use aria-modal and focus-trap for accessibility.
+       #confirm-delete-btn should trigger the DELETE API call.
+       #cancel-delete-btn should close the modal without action.
+       ============================================================ -->
+  <div id="delete-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-icon" aria-hidden="true">🗑️</div>
+      <h2 id="modal-title" class="modal-title">Delete this book?</h2>
+      <p class="modal-warning">
+        This will permanently remove the book and its associated file from ShelfSpace.
+        This action cannot be undone.
+      </p>
+      <div class="modal-actions">
+        <!-- JS: Attach click handler to close the modal -->
+        <button id="cancel-delete-btn" class="btn btn-outline">Keep Book</button>
+        <!-- JS: Attach click handler to call DELETE /api/books/:id -->
+        <button id="confirm-delete-btn" class="btn btn-danger">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SITE HEADER
+       The shared ShelfSpace navigation header, consistent across
+       all pages. Logo links to the home/library root.
+       ============================================================ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- Logo / Brand -->
+      <a href="/" class="site-logo" aria-label="ShelfSpace home">
+        <span class="logo-icon" aria-hidden="true">📚</span>
+        <span class="logo-text">ShelfSpace</span>
+      </a>
+
+      <!-- Primary Navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li>
+            <!-- JS: Active state can be set dynamically based on current route -->
+            <a href="/library" class="nav-link" id="nav-library">Library</a>
+          </li>
+          <li>
+            <a href="/upload" class="nav-link" id="nav-upload">Upload Book</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Mobile hamburger (structure only; JS handles toggle) -->
+      <button class="nav-toggle" id="nav-toggle-btn" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN PAGE CONTENT
+       JS: Once book data is loaded, hide #loading-state and
+       show this element by removing the "hidden" class.
+       ============================================================ -->
+  <main id="page-content" class="page-content hidden">
+
+    <!-- ============================================================
+         BREADCRUMB
+         JS: #breadcrumb-library-link href can be set dynamically.
+         #breadcrumb-book-title should be populated with the
+         book's title for screen-reader / SEO context.
+         ============================================================ -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <!-- JS: Set href to the library route, e.g. /library -->
+          <a href="/library" id="breadcrumb-library-link" class="breadcrumb-link">Library</a>
+        </li>
+        <li class="breadcrumb-item breadcrumb-separator" aria-hidden="true">/</li>
+        <li class="breadcrumb-item">
+          <!-- JS: Optionally update this text with the book's short title -->
+          <span id="breadcrumb-book-title" class="breadcrumb-current" aria-current="page">Book Details</span>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- ============================================================
+         MAIN BOOK DETAILS SECTION
+         Two-column layout: cover image on the left,
+         metadata and actions on the right.
+         Stacks to single column on mobile.
+         ============================================================ -->
+    <section class="book-details-section" aria-labelledby="book-title">
+      <div class="book-details-grid">
+
+        <!-- LEFT COLUMN: Book Cover -->
+        <div class="book-cover-column">
+          <div class="book-cover-wrapper">
+            <!-- JS: Set src to the book's cover image URL from the API.
+                 If no cover is available, keep the placeholder or swap
+                 to a generated cover via the book title/genre. -->
+            <img
+              id="book-cover"
+              class="book-cover-img"
+              src="https://placehold.co/320x460/24463A/C79346?text=Cover"
+              alt="Book cover"
+              loading="eager"
+            />
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Book Info & Actions -->
+        <div class="book-info-column">
+
+          <!-- Genre Badge
+               JS: Set the text content and optionally a data-genre
+               attribute for colour-coding by genre type. -->
+          <div class="genre-badge-row">
+            <span id="book-genre-badge" class="genre-badge">Fiction</span>
+          </div>
+
+          <!-- Book Title
+               JS: Populate with book.title from the API response -->
+          <h1 id="book-title" class="book-title">The Midnight Library</h1>
+
+          <!-- Author
+               JS: Populate with book.author -->
+          <p class="book-author-line">
+            <span class="meta-label">by</span>
+            <span id="book-author" class="book-author">Matt Haig</span>
+          </p>
+
+          <!-- Quick Meta Row (Genre, Date, Pages) -->
+          <dl class="book-quick-meta">
+            <div class="meta-pair">
+              <dt class="meta-label">Genre</dt>
+              <!-- JS: Populate with book.genre -->
+              <dd id="book-genre" class="meta-value">Literary Fiction</dd>
+            </div>
+            <div class="meta-pair">
+              <dt class="meta-label">Published</dt>
+              <!-- JS: Populate with a formatted version of book.publishDate -->
+              <dd id="book-publish-date" class="meta-value">13 August 2020</dd>
+            </div>
+            <div class="meta-pair">
+              <dt class="meta-label">Pages</dt>
+              <!-- JS: Populate with book.pages -->
+              <dd id="book-pages" class="meta-value">304</dd>
+            </div>
+          </dl>
+
+          <!-- Description
+               JS: Populate #book-description with book.description.
+               If description is null/empty, hide .book-description-block
+               entirely to avoid an empty section. -->
+          <div class="book-description-block">
+            <h2 class="section-label">About this book</h2>
+            <p id="book-description" class="book-description">
+              Between life and death there is a library, and within that library,
+              the shelves go on forever. Every book provides a chance to try another
+              life you could have lived — to see how things would have been if you had
+              made other choices.
+            </p>
+          </div>
+
+          <!-- ============================================================
+               PRIMARY ACTIONS
+               JS: Each button needs an event listener attached via JS.
+               - #read-book-btn    → open/redirect to the reader view
+               - #edit-book-btn    → navigate to /books/:id/edit
+               - #delete-book-btn  → show #delete-modal
+               - #back-to-library  → navigate to /library
+               ============================================================ -->
+          <div class="book-actions">
+            <button id="read-book-btn" class="btn btn-primary btn-read">
+              <span class="btn-icon" aria-hidden="true">📖</span>
+              Read Book
+            </button>
+
+            <div class="book-actions-secondary">
+              <button id="edit-book-btn" class="btn btn-outline">
+                <span class="btn-icon" aria-hidden="true">✏️</span>
+                Edit
+              </button>
+
+              <!-- JS: Clicking this should show #delete-modal -->
+              <button id="delete-book-btn" class="btn btn-danger-outline">
+                <span class="btn-icon" aria-hidden="true">🗑️</span>
+                Delete
+              </button>
+
+              <a href="/library" id="back-to-library" class="btn btn-ghost">
+                ← Back to Library
+              </a>
+            </div>
+          </div>
+
+        </div><!-- /book-info-column -->
+      </div><!-- /book-details-grid -->
+    </section>
+
+    <!-- ============================================================
+         METADATA PANEL
+         A structured information panel below the main details.
+         JS: Populate all #file-* and #upload-* fields from the
+         API response. Hide individual rows if data is unavailable.
+         ============================================================ -->
+    <section class="metadata-section" aria-labelledby="metadata-heading">
+      <h2 id="metadata-heading" class="section-heading">File Information</h2>
+
+      <div class="metadata-grid">
+
+        <!-- PDF / File availability -->
+        <div class="metadata-card">
+          <h3 class="metadata-card-title">File Details</h3>
+          <dl class="metadata-list">
+            <div class="metadata-row">
+              <dt class="metadata-key">File Type</dt>
+              <!-- JS: Populate with book.fileType, e.g. "PDF" -->
+              <dd id="file-type" class="metadata-value">
+                <span class="file-badge">PDF</span>
+              </dd>
+            </div>
+            <div class="metadata-row">
+              <dt class="metadata-key">File Size</dt>
+              <!-- JS: Populate with a formatted file size, e.g. "2.4 MB" -->
+              <dd id="file-size" class="metadata-value">2.4 MB</dd>
+            </div>
+            <div class="metadata-row">
+              <dt class="metadata-key">File Available</dt>
+              <!-- JS: Set to "Yes" / "No" and optionally apply a
+                   .status-ok or .status-missing class for colour coding -->
+              <dd id="file-availability" class="metadata-value status-ok">Yes</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Upload information -->
+        <div class="metadata-card">
+          <h3 class="metadata-card-title">Upload Info</h3>
+          <dl class="metadata-list">
+            <div class="metadata-row">
+              <dt class="metadata-key">Uploaded</dt>
+              <!-- JS: Populate with a formatted upload date/time -->
+              <dd id="upload-date" class="metadata-value">12 August 2026, 14:32</dd>
+            </div>
+            <div class="metadata-row">
+              <dt class="metadata-key">Uploaded By</dt>
+              <!-- JS: Populate with the uploader's display name or email -->
+              <dd id="upload-user" class="metadata-value">you</dd>
+            </div>
+            <div class="metadata-row">
+              <dt class="metadata-key">Book ID</dt>
+              <!-- JS: Populate with the book's unique ID from the database -->
+              <dd id="book-id" class="metadata-value monospace">—</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Reading stats / extra metadata
+             JS: This card can be hidden entirely if no stats are tracked yet.
+             Populate or remove individual rows as the backend expands. -->
+        <div class="metadata-card" id="stats-card">
+          <h3 class="metadata-card-title">Reading Stats</h3>
+          <dl class="metadata-list">
+            <div class="metadata-row">
+              <dt class="metadata-key">Times Opened</dt>
+              <!-- JS: Populate with book.openCount or similar -->
+              <dd id="book-open-count" class="metadata-value">—</dd>
+            </div>
+            <div class="metadata-row">
+              <dt class="metadata-key">Last Read</dt>
+              <!-- JS: Populate with a formatted date or "Never" -->
+              <dd id="book-last-read" class="metadata-value">Never</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div><!-- /metadata-grid -->
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       SITE FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">📚 ShelfSpace</span>
+      <p class="footer-copy">&copy; 2026 ShelfSpace. Your personal digital library.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ShelfSpace PDF book reader"
+    >
+
+    <title>Reader | ShelfSpace</title>
+
+    <link rel="stylesheet" href="reader.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         SHELFSPACE PDF READER
+         ---------------------------------------------------------
+         This page contains ONLY the HTML structure for the reader.
+
+         Future JavaScript/PDF.js will:
+         - Load the uploaded PDF.
+         - Render pages inside #pdf-viewer.
+         - Change pages using the previous/next controls.
+         - Update the current page and total page count.
+         - Control zoom.
+         - Handle fullscreen mode.
+         - Toggle loading/error/empty states.
+         ========================================================= -->
+
+
+    <!-- =========================================================
+         TOP READER TOOLBAR
+         ========================================================= -->
+    <header class="reader-toolbar">
+
+        <!-- LEFT SIDE:
+             Used for navigation back to the book details page
+             and for displaying basic book information.
+        -->
+        <div class="toolbar-section toolbar-left">
+
+            <!-- FUTURE JS:
+                 This button will return the user to the current
+                 book's detail page.
+            -->
+            <button
+                id="back-to-book-btn"
+                class="reader-btn back-btn"
+                type="button"
+                title="Back to book"
+                aria-label="Back to book details"
+            >
+                <span aria-hidden="true">←</span>
+                <span class="back-btn-text">Back</span>
+            </button>
+
+
+            <!-- Small ShelfSpace branding -->
+            <a
+                href="#"
+                class="reader-brand"
+                aria-label="ShelfSpace home"
+            >
+                <span class="reader-brand-mark">S</span>
+
+                <span class="reader-brand-name">
+                    ShelfSpace
+                </span>
+            </a>
+
+
+            <!-- FUTURE JS:
+                 JavaScript can replace this text with the actual
+                 title of the book being read.
+            -->
+            <div
+                id="reader-book-title"
+                class="reader-book-title"
+                title="Current book title"
+            >
+                The Great Example Book
+            </div>
+
+        </div>
+
+
+        <!-- CENTER SIDE:
+             Page navigation controls.
+        -->
+        <div
+            class="toolbar-section toolbar-center"
+            aria-label="Page navigation"
+        >
+
+            <!-- FUTURE JS:
+                 Moves to the previous PDF page.
+            -->
+            <button
+                id="previous-page-btn"
+                class="reader-btn icon-btn"
+                type="button"
+                title="Previous page"
+                aria-label="Previous page"
+            >
+                <span aria-hidden="true">‹</span>
+            </button>
+
+
+            <div class="page-counter">
+
+                <label
+                    for="current-page-input"
+                    class="visually-hidden"
+                >
+                    Current page
+                </label>
+
+                <!-- FUTURE JS:
+                     Displays the current page number.
+                     JavaScript may also allow the user to enter
+                     a page number and jump directly to it.
+                -->
+                <input
+                    id="current-page-input"
+                    class="current-page-input"
+                    type="number"
+                    value="1"
+                    min="1"
+                    inputmode="numeric"
+                    aria-label="Current page number"
+                >
+
+                <span
+                    class="page-counter-separator"
+                    aria-hidden="true"
+                >
+                    /
+                </span>
+
+                <!-- FUTURE JS:
+                     Displays the total number of pages after
+                     the PDF has loaded.
+                -->
+                <span
+                    id="total-pages"
+                    class="total-pages"
+                    aria-label="Total pages"
+                >
+                    248
+                </span>
+
+            </div>
+
+
+            <!-- FUTURE JS:
+                 Moves to the next PDF page.
+            -->
+            <button
+                id="next-page-btn"
+                class="reader-btn icon-btn"
+                type="button"
+                title="Next page"
+                aria-label="Next page"
+            >
+                <span aria-hidden="true">›</span>
+            </button>
+
+        </div>
+
+
+        <!-- RIGHT SIDE:
+             Zoom, fit-width and fullscreen controls.
+        -->
+        <div
+            class="toolbar-section toolbar-right"
+            aria-label="Reader display controls"
+        >
+
+            <!-- FUTURE JS:
+                 Decreases PDF zoom level.
+            -->
+            <button
+                id="zoom-out-btn"
+                class="reader-btn icon-btn"
+                type="button"
+                title="Zoom out"
+                aria-label="Zoom out"
+            >
+                <span aria-hidden="true">−</span>
+            </button>
+
+
+            <!-- FUTURE JS:
+                 Displays the current PDF zoom percentage.
+            -->
+            <output
+                id="zoom-level"
+                class="zoom-level"
+                aria-label="Current zoom level"
+            >
+                100%
+            </output>
+
+
+            <!-- FUTURE JS:
+                 Increases PDF zoom level.
+            -->
+            <button
+                id="zoom-in-btn"
+                class="reader-btn icon-btn"
+                type="button"
+                title="Zoom in"
+                aria-label="Zoom in"
+            >
+                <span aria-hidden="true">+</span>
+            </button>
+
+
+            <!-- FUTURE JS:
+                 Adjusts the document scale so the current page
+                 fits the available reader width.
+            -->
+            <button
+                id="fit-width-btn"
+                class="reader-btn toolbar-text-btn"
+                type="button"
+                title="Fit page to available width"
+                aria-label="Fit page to width"
+            >
+                Fit Width
+            </button>
+
+
+            <!-- FUTURE JS:
+                 Toggles fullscreen reader mode.
+            -->
+            <button
+                id="fullscreen-btn"
+                class="reader-btn icon-btn fullscreen-btn"
+                type="button"
+                title="Enter fullscreen"
+                aria-label="Toggle fullscreen"
+            >
+                <span aria-hidden="true">⛶</span>
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         MAIN READER AREA
+         ========================================================= -->
+    <main class="reader-layout">
+
+
+        <!-- =====================================================
+             OPTIONAL LEFT SIDEBAR
+             -----------------------------------------------------
+             Future JavaScript may make this sidebar collapsible
+             and populate it with real PDF thumbnails or a
+             table of contents.
+             ===================================================== -->
+        <aside
+            id="reader-sidebar"
+            class="reader-sidebar"
+            aria-label="Book navigation"
+        >
+
+            <div class="sidebar-header">
+
+                <h2 class="sidebar-title">
+                    Pages
+                </h2>
+
+
+                <!-- FUTURE JS:
+                     Optional control for hiding/showing the
+                     sidebar. No collapse functionality exists yet.
+                -->
+                <button
+                    id="sidebar-toggle-btn"
+                    class="sidebar-toggle-btn"
+                    type="button"
+                    title="Toggle sidebar"
+                    aria-label="Toggle reader sidebar"
+                >
+                    ‹
+                </button>
+
+            </div>
+
+
+            <div class="sidebar-tabs">
+
+                <button
+                    id="thumbnails-tab-btn"
+                    class="sidebar-tab sidebar-tab-active"
+                    type="button"
+                >
+                    Thumbnails
+                </button>
+
+                <button
+                    id="contents-tab-btn"
+                    class="sidebar-tab"
+                    type="button"
+                >
+                    Contents
+                </button>
+
+            </div>
+
+
+            <!-- FUTURE JS:
+                 This area can be replaced/populated with actual
+                 PDF page thumbnails.
+            -->
+            <div
+                id="thumbnail-list"
+                class="thumbnail-list"
+            >
+
+                <button
+                    class="thumbnail-item thumbnail-item-active"
+                    type="button"
+                    aria-label="Go to page 1"
+                >
+                    <div class="thumbnail-paper">
+                        <span class="thumbnail-heading"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line short"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line medium"></span>
+                    </div>
+
+                    <span class="thumbnail-page-number">
+                        1
+                    </span>
+                </button>
+
+
+                <button
+                    class="thumbnail-item"
+                    type="button"
+                    aria-label="Go to page 2"
+                >
+                    <div class="thumbnail-paper">
+                        <span class="thumbnail-heading"></span>
+                        <span class="thumbnail-line medium"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line short"></span>
+                        <span class="thumbnail-line"></span>
+                    </div>
+
+                    <span class="thumbnail-page-number">
+                        2
+                    </span>
+                </button>
+
+
+                <button
+                    class="thumbnail-item"
+                    type="button"
+                    aria-label="Go to page 3"
+                >
+                    <div class="thumbnail-paper">
+                        <span class="thumbnail-heading"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line medium"></span>
+                        <span class="thumbnail-line short"></span>
+                    </div>
+
+                    <span class="thumbnail-page-number">
+                        3
+                    </span>
+                </button>
+
+
+                <button
+                    class="thumbnail-item"
+                    type="button"
+                    aria-label="Go to page 4"
+                >
+                    <div class="thumbnail-paper">
+                        <span class="thumbnail-heading"></span>
+                        <span class="thumbnail-line short"></span>
+                        <span class="thumbnail-line"></span>
+                        <span class="thumbnail-line medium"></span>
+                        <span class="thumbnail-line"></span>
+                    </div>
+
+                    <span class="thumbnail-page-number">
+                        4
+                    </span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================================
+             READER WORKSPACE
+             -----------------------------------------------------
+             This is the scrollable area surrounding the actual
+             PDF pages.
+             ===================================================== -->
+        <section
+            id="reader-workspace"
+            class="reader-workspace"
+            aria-label="PDF reading area"
+        >
+
+
+            <!-- =================================================
+                 READER STATES
+                 -------------------------------------------------
+                 These states are hidden by default.
+
+                 Future JavaScript can show/hide them depending
+                 on the state of the PDF.
+                 ================================================= -->
+
+
+            <!-- FUTURE JS:
+                 Show while the PDF is being fetched/rendered.
+            -->
+            <div
+                id="pdf-loading-state"
+                class="reader-state"
+                role="status"
+                aria-live="polite"
+                hidden
+            >
+                <div class="loading-spinner" aria-hidden="true"></div>
+
+                <h2>
+                    Loading book...
+                </h2>
+
+                <p>
+                    Preparing your pages for reading.
+                </p>
+            </div>
+
+
+            <!-- FUTURE JS:
+                 Show when the PDF failed to load.
+            -->
+            <div
+                id="pdf-error-state"
+                class="reader-state"
+                role="alert"
+                hidden
+            >
+                <div
+                    class="state-symbol"
+                    aria-hidden="true"
+                >
+                    !
+                </div>
+
+                <h2>
+                    Unable to load this book
+                </h2>
+
+                <p>
+                    The PDF could not be opened. Please try again.
+                </p>
+            </div>
+
+
+            <!-- FUTURE JS:
+                 Show when the selected book has no PDF attached.
+            -->
+            <div
+                id="no-pdf-state"
+                class="reader-state"
+                hidden
+            >
+                <div
+                    class="state-symbol"
+                    aria-hidden="true"
+                >
+                    —
+                </div>
+
+                <h2>
+                    No PDF available
+                </h2>
+
+                <p>
+                    This book does not currently have a readable PDF.
+                </p>
+            </div>
+
+
+
+            <!-- =================================================
+                 PDF VIEWER
+                 -------------------------------------------------
+                 THIS IS THE IMPORTANT FUTURE PDF RENDERING AREA.
+
+                 Future JavaScript/PDF.js should render PDF pages
+                 inside #pdf-viewer.
+
+                 The sample page below exists ONLY to show the
+                 appearance of the reader before JavaScript is
+                 implemented.
+                 ================================================= -->
+            <div
+                id="pdf-viewer"
+                class="pdf-viewer"
+            >
+
+
+                <!-- SAMPLE PDF PAGE PLACEHOLDER
+                     Remove or replace this when PDF.js begins
+                     rendering real PDF pages.
+                -->
+                <article
+                    id="sample-pdf-page"
+                    class="pdf-page sample-pdf-page"
+                    aria-label="Sample PDF page"
+                >
+
+                    <div class="sample-document-content">
+
+                        <span class="sample-chapter">
+                            CHAPTER ONE
+                        </span>
+
+                        <h1>
+                            A Quiet Beginning
+                        </h1>
+
+                        <p class="sample-opening">
+                            Books have always carried more than words.
+                            They preserve ideas, memories and worlds
+                            waiting quietly for someone to open them.
+                        </p>
+
+                        <p>
+                            The morning light stretched across the old
+                            library floor, touching the shelves one by
+                            one. Dust moved slowly through the narrow
+                            beams of sunlight while the room remained
+                            almost completely silent.
+                        </p>
+
+                        <p>
+                            Somewhere between the rows of forgotten
+                            books rested a volume that had not been
+                            opened for many years. Its cover had faded,
+                            its pages had yellowed, but the story inside
+                            remained exactly where its last reader had
+                            left it.
+                        </p>
+
+                        <p>
+                            A hand reached toward the shelf and carefully
+                            pulled the book free. For a moment, nothing
+                            happened. Then the cover opened.
+                        </p>
+
+                        <blockquote>
+                            Some stories wait patiently until the right
+                            reader finds them.
+                        </blockquote>
+
+                        <p>
+                            The first page turned with a soft rustle.
+                            The library disappeared, and another world
+                            began.
+                        </p>
+
+                    </div>
+
+
+                    <span class="sample-page-number">
+                        1
+                    </span>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================================================
+         MOBILE READER CONTROLS
+         ---------------------------------------------------------
+         Visible only on smaller screens.
+
+         These controls are separate so page navigation and zoom
+         remain comfortable on mobile devices.
+
+         Future JavaScript can connect these controls to the same
+         reader logic used by the desktop toolbar.
+         ========================================================= -->
+    <nav
+        class="mobile-reader-controls"
+        aria-label="Mobile PDF controls"
+    >
+
+        <!-- FUTURE JS: Previous page -->
+        <button
+            id="mobile-previous-page-btn"
+            class="reader-btn icon-btn"
+            type="button"
+            title="Previous page"
+            aria-label="Previous page"
+        >
+            <span aria-hidden="true">‹</span>
+        </button>
+
+
+        <!-- FUTURE JS:
+             Mobile current page display.
+        -->
+        <div class="mobile-page-counter">
+
+            <span
+                id="mobile-current-page"
+                class="mobile-current-page"
+            >
+                1
+            </span>
+
+            <span aria-hidden="true">
+                /
+            </span>
+
+            <!-- FUTURE JS:
+                 Mobile total page display.
+            -->
+            <span
+                id="mobile-total-pages"
+                class="mobile-total-pages"
+            >
+                248
+            </span>
+
+        </div>
+
+
+        <!-- FUTURE JS: Next page -->
+        <button
+            id="mobile-next-page-btn"
+            class="reader-btn icon-btn"
+            type="button"
+            title="Next page"
+            aria-label="Next page"
+        >
+            <span aria-hidden="true">›</span>
+        </button>
+
+
+        <span class="mobile-control-divider"></span>
+
+
+        <!-- FUTURE JS: Decrease zoom -->
+        <button
+            id="mobile-zoom-out-btn"
+            class="reader-btn icon-btn"
+            type="button"
+            title="Zoom out"
+            aria-label="Zoom out"
+        >
+            −
+        </button>
+
+
+        <!-- FUTURE JS: Mobile zoom percentage -->
+        <span
+            id="mobile-zoom-level"
+            class="mobile-zoom-level"
+        >
+            100%
+        </span>
+
+
+        <!-- FUTURE JS: Increase zoom -->
+        <button
+            id="mobile-zoom-in-btn"
+            class="reader-btn icon-btn"
+            type="button"
+            title="Zoom in"
+            aria-label="Zoom in"
+        >
+            +
+        </button>
+
+    </nav>
+
+</body>
+</html>

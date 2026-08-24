@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ShelfSpace — browse and manage your digital book library." />
+  <title>Library — ShelfSpace</title>
+  <link rel="stylesheet" href="library.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER / SITE NAVIGATION
+       - Logo: .site-logo
+       - Nav links: .site-nav__link  (active page gets .is-active)
+       - Account placeholder: .site-header__account (for future auth)
+       ============================================================ -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+
+      <!-- Logo — links to library root -->
+      <a href="/library" class="site-logo" aria-label="ShelfSpace — go to home">
+        <!-- CSS-drawn book-spine marks -->
+        <span class="site-logo__mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </span>
+        <span class="site-logo__text">Shelf<em>Space</em></span>
+      </a>
+
+      <!-- Primary navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list" role="list">
+          <li>
+            <!-- aria-current="page" marks the active route for screen readers -->
+            <a href="/library"
+               class="site-nav__link is-active"
+               aria-current="page">
+              Library
+            </a>
+          </li>
+          <li>
+            <!-- JS can attach a click handler or this can be a real href -->
+            <a href="/upload" class="site-nav__link">
+              Upload Book
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Account area — placeholder for future profile / auth dropdown -->
+      <div class="site-header__account" aria-label="Account area">
+        <!-- JS will replace this with user avatar / menu when auth is added -->
+        <div class="account-placeholder" aria-hidden="true" title="Profile (coming soon)">
+          &#128100;
+        </div>
+      </div>
+
+    </div>
+  </header>
+  <!-- END HEADER -->
+
+
+  <!-- ============================================================
+       MAIN CONTENT AREA
+       ============================================================ -->
+  <main class="main-content" id="main" role="main">
+
+
+    <!-- ============================================================
+         LIBRARY HERO — Page heading, subtitle, and Upload CTA
+         ============================================================ -->
+    <section class="library-hero" aria-labelledby="library-heading">
+
+      <div class="library-hero__text">
+        <h1 class="library-hero__heading" id="library-heading">Your Library</h1>
+        <p class="library-hero__subtitle">
+          Browse, search, and manage all your uploaded books in one place.
+        </p>
+      </div>
+
+      <div class="library-hero__actions">
+        <!--
+          id="upload-book-btn": JS will use this to navigate to the upload page
+          or open an upload modal when the feature is wired up.
+        -->
+        <a href="/upload" class="btn-primary" id="upload-book-btn">
+          <span class="btn-icon" aria-hidden="true">＋</span>
+          Upload Book
+        </a>
+      </div>
+
+    </section>
+    <!-- END LIBRARY HERO -->
+
+
+    <!-- ============================================================
+         SEARCH BAR
+         - id="book-search"  → JS will read this value on input/submit
+         - id="search-clear" → JS will show/hide and clear the input
+         - id="search-form"  → JS can intercept submit to run client-side search
+         ============================================================ -->
+    <section class="search-section" aria-label="Search your library">
+
+      <div class="search-bar" role="search" id="search-form">
+
+        <!-- Accessible label is provided by aria-label on the input -->
+        <span class="search-bar__icon-glyph" aria-hidden="true">&#128269;</span>
+
+        <input
+          type="search"
+          id="book-search"
+          name="q"
+          class="search-bar__input"
+          placeholder="Search by title or author…"
+          aria-label="Search books by title or author"
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <!--
+          id="search-clear": JS should set visibility: visible when #book-search has a value,
+          and clear the input on click.
+        -->
+        <button
+          type="button"
+          id="search-clear"
+          class="search-bar__clear"
+          aria-label="Clear search"
+        >
+          ✕ Clear
+        </button>
+
+        <button
+          type="submit"
+          class="search-bar__submit"
+          aria-label="Search"
+        >
+          Search
+        </button>
+
+      </div>
+
+    </section>
+    <!-- END SEARCH BAR -->
+
+
+    <!-- ============================================================
+         FILTER / SORT TOOLBAR
+         Each control has a unique ID for JavaScript to read values from.
+
+         JS flow:
+         - Read #filter-genre, #filter-author, #filter-sort on change
+         - id="clear-filters-btn" → reset all controls to default
+         ============================================================ -->
+    <section class="filter-toolbar" aria-label="Filter and sort books">
+
+      <span class="filter-toolbar__label" aria-hidden="true">Filter:</span>
+
+      <!-- Genre filter -->
+      <label for="filter-genre" class="sr-only">Filter by genre</label>
+      <select id="filter-genre" class="filter-select" name="genre">
+        <option value="">All Genres</option>
+        <option value="fiction">Fiction</option>
+        <option value="non-fiction">Non-Fiction</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+        <option value="biography">Biography</option>
+        <option value="philosophy">Philosophy</option>
+        <option value="technology">Technology</option>
+        <option value="mystery">Mystery</option>
+        <option value="romance">Romance</option>
+        <option value="fantasy">Fantasy</option>
+        <option value="poetry">Poetry</option>
+        <option value="other">Other</option>
+      </select>
+
+      <!-- Author filter (text input — JS can autocomplete or filter list) -->
+      <label for="filter-author" class="sr-only">Filter by author name</label>
+      <input
+        type="text"
+        id="filter-author"
+        class="filter-input"
+        name="author"
+        placeholder="Author…"
+        aria-label="Filter by author name"
+        autocomplete="off"
+      />
+
+      <div class="filter-divider" aria-hidden="true"></div>
+
+      <!-- Sort control -->
+      <label for="filter-sort" class="sr-only">Sort books by</label>
+      <select id="filter-sort" class="filter-select" name="sort">
+        <option value="title-asc">Title (A–Z)</option>
+        <option value="title-desc">Title (Z–A)</option>
+        <option value="author-asc">Author (A–Z)</option>
+        <option value="author-desc">Author (Z–A)</option>
+        <option value="genre-asc">Genre (A–Z)</option>
+        <option value="date-desc">Newest First</option>
+        <option value="date-asc">Oldest First</option>
+        <option value="pages-asc">Fewest Pages</option>
+        <option value="pages-desc">Most Pages</option>
+      </select>
+
+      <!-- Clear all filters -->
+      <div class="filter-toolbar__clear">
+        <!--
+          id="clear-filters-btn": JS will reset all filter/sort controls
+          and re-render the book grid when clicked.
+        -->
+        <button type="button" id="clear-filters-btn" class="btn-ghost">
+          ✕ Clear Filters
+        </button>
+      </div>
+
+    </section>
+    <!-- END FILTER TOOLBAR -->
+
+
+    <!-- ============================================================
+         RESULTS SUMMARY BAR
+         JS will update:
+         - #results-count → display "Showing X of Y books"
+         ============================================================ -->
+    <div class="results-bar" aria-live="polite" aria-atomic="true">
+      <p class="results-bar__count">
+        Showing <strong id="results-count">6</strong> of <strong>6</strong> books
+      </p>
+    </div>
+
+
+    <!-- ============================================================
+         BOOK GRID
+         - Each card uses class="book-card" (no unique per-card ID)
+         - data-book-id is the key JS uses to identify which book was interacted with
+         - .view-book-btn / .edit-book-btn / .delete-book-btn are reusable class hooks
+         - Genre badges, meta info, etc. use semantic classes for easy querySelectorAll
+         ============================================================ -->
+    <section aria-label="Book collection">
+
+      <ul class="book-grid" id="book-grid" role="list">
+
+
+        <!-- ── BOOK CARD 1 ── -->
+        <li class="book-card" data-book-id="bk-001" role="listitem">
+
+          <!-- Cover placeholder — JS can replace with <img> when a cover URL exists -->
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-1">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">The Midnight Library</span>
+            </div>
+            <!-- Genre badge overlaid on the cover -->
+            <span class="book-card__genre-badge">Fiction</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">The Midnight Library</h2>
+            <p class="book-card__author">Matt Haig</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 2020</span>
+              <span class="book-card__meta-item">📄 304 pp.</span>
+            </div>
+          </div>
+
+          <!-- Card action buttons — JS attaches event listeners by class -->
+          <div class="book-card__actions">
+            <!--
+              .view-book-btn → JS reads closest .book-card[data-book-id] to navigate
+              .edit-book-btn → JS opens edit form for this book
+              .delete-book-btn → JS shows delete confirmation modal
+            -->
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for The Midnight Library">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit The Midnight Library">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete The Midnight Library">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 1 -->
+
+
+        <!-- ── BOOK CARD 2 ── -->
+        <li class="book-card" data-book-id="bk-002" role="listitem">
+
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-2">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">Sapiens</span>
+            </div>
+            <span class="book-card__genre-badge">History</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">Sapiens: A Brief History of Humankind</h2>
+            <p class="book-card__author">Yuval Noah Harari</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 2011</span>
+              <span class="book-card__meta-item">📄 443 pp.</span>
+            </div>
+          </div>
+
+          <div class="book-card__actions">
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for Sapiens">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit Sapiens">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete Sapiens">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 2 -->
+
+
+        <!-- ── BOOK CARD 3 ── -->
+        <li class="book-card" data-book-id="bk-003" role="listitem">
+
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-3">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">The Great Gatsby</span>
+            </div>
+            <span class="book-card__genre-badge">Fiction</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">The Great Gatsby</h2>
+            <p class="book-card__author">F. Scott Fitzgerald</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 1925</span>
+              <span class="book-card__meta-item">📄 180 pp.</span>
+            </div>
+          </div>
+
+          <div class="book-card__actions">
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for The Great Gatsby">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit The Great Gatsby">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete The Great Gatsby">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 3 -->
+
+
+        <!-- ── BOOK CARD 4 ── -->
+        <li class="book-card" data-book-id="bk-004" role="listitem">
+
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-4">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">Meditations</span>
+            </div>
+            <span class="book-card__genre-badge">Philosophy</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">Meditations</h2>
+            <p class="book-card__author">Marcus Aurelius</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 ~180 AD</span>
+              <span class="book-card__meta-item">📄 254 pp.</span>
+            </div>
+          </div>
+
+          <div class="book-card__actions">
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for Meditations">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit Meditations">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete Meditations">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 4 -->
+
+
+        <!-- ── BOOK CARD 5 ── -->
+        <li class="book-card" data-book-id="bk-005" role="listitem">
+
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-5">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">The Lean Startup</span>
+            </div>
+            <span class="book-card__genre-badge">Technology</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">The Lean Startup</h2>
+            <p class="book-card__author">Eric Ries</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 2011</span>
+              <span class="book-card__meta-item">📄 336 pp.</span>
+            </div>
+          </div>
+
+          <div class="book-card__actions">
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for The Lean Startup">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit The Lean Startup">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete The Lean Startup">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 5 -->
+
+
+        <!-- ── BOOK CARD 6 ── -->
+        <li class="book-card" data-book-id="bk-006" role="listitem">
+
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-6">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title">Atomic Habits</span>
+            </div>
+            <span class="book-card__genre-badge">Non-Fiction</span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title">Atomic Habits</h2>
+            <p class="book-card__author">James Clear</p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 2018</span>
+              <span class="book-card__meta-item">📄 320 pp.</span>
+            </div>
+          </div>
+
+          <div class="book-card__actions">
+            <button type="button"
+                    class="view-book-btn"
+                    aria-label="View details for Atomic Habits">
+              View Details
+            </button>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit Atomic Habits">
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    aria-label="Delete Atomic Habits">
+              🗑
+            </button>
+          </div>
+
+        </li>
+        <!-- END BOOK CARD 6 -->
+
+
+      </ul>
+    </section>
+    <!-- END BOOK GRID -->
+
+
+    <!-- ============================================================
+         EMPTY STATE
+         id="empty-state": JS sets this to display:none when books exist,
+         or display:flex when the grid is empty (search/filter returns nothing).
+         Default display is "none" (books are showing above on page load).
+
+         Also used when the library truly has zero books uploaded yet.
+         The "Upload your first book" button mirrors #upload-book-btn above.
+         ============================================================ -->
+    <section
+      id="empty-state"
+      class="empty-state"
+      aria-label="No books found"
+      aria-live="polite"
+      style="display: none;"
+    >
+
+      <!-- CSS-drawn bookshelf illustration -->
+      <div class="empty-state__illustration" aria-hidden="true">
+        <div class="empty-state__books">
+          <div class="empty-book"></div>
+          <div class="empty-book"></div>
+          <div class="empty-book"></div>
+        </div>
+        <div class="empty-state__placeholder"></div>
+        <div class="empty-state__shelf"></div>
+      </div>
+
+      <h2 class="empty-state__heading">No books found</h2>
+      <p class="empty-state__text">
+        Try adjusting your search or filters, or upload a new book to get started.
+      </p>
+
+      <!-- Links to upload page; JS can also wire this to navigate programmatically -->
+      <a href="/upload" class="btn-primary" aria-label="Upload your first book">
+        <span class="btn-icon" aria-hidden="true">＋</span>
+        Upload your first book
+      </a>
+
+    </section>
+    <!-- END EMPTY STATE -->
+
+
+    <!-- ============================================================
+         PAGINATION
+         id="pagination"        → JS can hide when results fit one page
+         id="pagination-prev"   → JS disables on first page
+         id="pagination-next"   → JS disables on last page
+         .pagination__btn       → JS reads data-page attribute to jump to a page
+         .is-current            → JS adds this class to the active page button
+         ============================================================ -->
+    <nav
+      id="pagination"
+      class="pagination"
+      aria-label="Book list pagination"
+      role="navigation"
+    >
+
+      <!-- Previous page -->
+      <button
+        type="button"
+        id="pagination-prev"
+        class="pagination__btn"
+        aria-label="Go to previous page"
+        disabled
+      >
+        &#8592; Prev
+      </button>
+
+      <!-- Page number buttons — JS will generate these dynamically;
+           these are static examples showing the pattern -->
+      <button
+        type="button"
+        class="pagination__btn is-current"
+        data-page="1"
+        aria-label="Page 1"
+        aria-current="page"
+      >
+        1
+      </button>
+
+      <button
+        type="button"
+        class="pagination__btn"
+        data-page="2"
+        aria-label="Go to page 2"
+      >
+        2
+      </button>
+
+      <button
+        type="button"
+        class="pagination__btn"
+        data-page="3"
+        aria-label="Go to page 3"
+      >
+        3
+      </button>
+
+      <span class="pagination__ellipsis" aria-hidden="true">…</span>
+
+      <button
+        type="button"
+        class="pagination__btn"
+        data-page="8"
+        aria-label="Go to page 8"
+      >
+        8
+      </button>
+
+      <!-- Next page -->
+      <button
+        type="button"
+        id="pagination-next"
+        class="pagination__btn"
+        aria-label="Go to next page"
+      >
+        Next &#8594;
+      </button>
+
+    </nav>
+    <!-- END PAGINATION -->
+
+
+  </main>
+  <!-- END MAIN CONTENT -->
+
+
+  <!-- ============================================================
+       SCREEN-READER ONLY UTILITY CLASS
+       Add .sr-only to labels that visually appear elsewhere but
+       need to exist in the DOM for accessibility.
+       ============================================================ -->
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+</body>
+</html>

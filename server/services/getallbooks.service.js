@@ -10,7 +10,8 @@ async function getAllBooksService(filters={},sortBy,skip,limit){
        
     }
   const books= await query.skip(skip).limit(limit)
-    return books;
+  const totalBooks=await Book.countDocuments(filters)
+    return {books,totalBooks};
        
 
 

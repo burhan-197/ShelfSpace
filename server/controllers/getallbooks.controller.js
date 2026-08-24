@@ -36,8 +36,12 @@ async function getAllBooks(req,res,next){
             }
    
         
-            const books = await getAllBooksService(filters, sortBy,skip, limit);
-            res.status(200).json(books);
+            
+            const { books,totalBooks } = await getAllBooksService(filters, sortBy,skip, limit);
+            const totalPages = Math.ceil(totalBooks / limit)
+            
+
+            res.status(200).json({ books, totalBooks, totalPages, currentPage:page ,limit});
         
     }catch (err) {
         next(err);

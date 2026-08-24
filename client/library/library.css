@@ -1,0 +1,1125 @@
+/* ============================================================
+   ShelfSpace — library.css
+   Brand: #F7F4ED bg | #24463A dark green | #C79346 gold
+          #202624 text | #66706C secondary | #FFFDFC surface
+          #DED8CC border | #B54747 danger
+   ============================================================ */
+
+/* ── Reset & Box-Sizing ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Custom Properties ── */
+:root {
+  --color-bg:          #F7F4ED;
+  --color-primary:     #24463A;
+  --color-primary-hover: #1a3329;
+  --color-gold:        #C79346;
+  --color-gold-light:  #f0e0c0;
+  --color-text:        #202624;
+  --color-text-secondary: #66706C;
+  --color-surface:     #FFFDFC;
+  --color-border:      #DED8CC;
+  --color-danger:      #B54747;
+  --color-danger-hover:#8e3535;
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:  0 4px 12px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,.12);
+
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-ui:    system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --header-height: 64px;
+  --content-max: 1280px;
+  --gap-section: 2.5rem;
+}
+
+/* ── Base ── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Focus Styles (Accessibility) ── */
+:focus-visible {
+  outline: 2.5px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   HEADER / NAVIGATION
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background-color: var(--color-primary);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+}
+
+/* Logo */
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+}
+
+.site-logo__mark {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+/* CSS book-spine marks for the logo */
+.site-logo__mark span {
+  display: block;
+  background-color: var(--color-gold);
+  border-radius: 1px;
+  width: 4px;
+}
+
+.site-logo__mark span:nth-child(1) { height: 18px; }
+.site-logo__mark span:nth-child(2) { height: 24px; }
+.site-logo__mark span:nth-child(3) { height: 20px; }
+.site-logo__mark span:nth-child(4) { height: 16px; }
+.site-logo__mark span:nth-child(5) { height: 22px; }
+
+.site-logo__text {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .01em;
+}
+
+.site-logo__text em {
+  color: var(--color-gold);
+  font-style: normal;
+}
+
+/* Primary navigation */
+.site-nav {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  list-style: none;
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem .9rem;
+  border-radius: var(--radius-sm);
+  font-size: .9rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.75);
+  transition: background .18s, color .18s;
+  text-decoration: none;
+}
+
+.site-nav__link:hover {
+  color: #fff;
+  background-color: rgba(255,255,255,.1);
+}
+
+/* Active page indicator */
+.site-nav__link.is-active {
+  color: #fff;
+  background-color: rgba(199,147,70,.2);
+  border-bottom: 2px solid var(--color-gold);
+}
+
+/* Placeholder for future profile/account area */
+.site-header__account {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.account-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,.12);
+  border: 1.5px solid rgba(255,255,255,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.6);
+  font-size: .85rem;
+}
+
+/* ============================================================
+   MAIN CONTENT WRAPPER
+   ============================================================ */
+.main-content {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+/* ============================================================
+   LIBRARY HERO — heading, subtitle, upload CTA
+   ============================================================ */
+.library-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: var(--gap-section);
+  flex-wrap: wrap;
+}
+
+.library-hero__text {}
+
+.library-hero__heading {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+  margin-bottom: .45rem;
+}
+
+.library-hero__subtitle {
+  color: var(--color-text-secondary);
+  font-size: .97rem;
+  max-width: 48ch;
+}
+
+.library-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-shrink: 0;
+  padding-top: .2rem;
+}
+
+/* ============================================================
+   BUTTON SYSTEM
+   ============================================================ */
+
+/* Primary button — dark green */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .62rem 1.25rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .92rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: background .18s, box-shadow .18s, transform .1s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(36,70,58,.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary .btn-icon {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+/* Secondary/outlined button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1.2rem;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: .92rem;
+  font-weight: 600;
+  transition: background .18s, color .18s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Ghost/light button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem .85rem;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: .85rem;
+  font-weight: 500;
+  transition: border-color .18s, color .18s, background .18s;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: rgba(36,70,58,.04);
+}
+
+/* Danger button */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .38rem .7rem;
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: .8rem;
+  font-weight: 500;
+  transition: background .18s, border-color .18s;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: rgba(181,71,71,.08);
+  border-color: rgba(181,71,71,.3);
+}
+
+/* Small icon buttons within cards */
+.btn-icon-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  background: transparent;
+  font-size: .85rem;
+  transition: background .18s, border-color .18s;
+  cursor: pointer;
+}
+
+.btn-icon-sm.edit {
+  color: var(--color-text-secondary);
+}
+
+.btn-icon-sm.edit:hover {
+  color: var(--color-primary);
+  background-color: rgba(36,70,58,.07);
+  border-color: var(--color-border);
+}
+
+.btn-icon-sm.delete {
+  color: var(--color-danger);
+}
+
+.btn-icon-sm.delete:hover {
+  background-color: rgba(181,71,71,.08);
+  border-color: rgba(181,71,71,.25);
+}
+
+/* ============================================================
+   SEARCH BAR
+   ============================================================ */
+.search-section {
+  margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.search-bar:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(36,70,58,.1), var(--shadow-sm);
+}
+
+.search-bar__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem 0 1.25rem;
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Using CSS-drawn magnifier as SVG substitute without JS */
+.search-bar__icon::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 -1px transparent,
+              inset 0 0 0 0 transparent;
+  position: relative;
+}
+
+.search-bar__icon::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 2px;
+  background: currentColor;
+  position: absolute;
+  transform: rotate(45deg);
+  margin-left: 14px;
+  margin-top: 14px;
+  border-radius: 1px;
+}
+
+/* Simpler approach for magnifier — unicode */
+.search-bar__icon-glyph {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  padding: 0 .75rem 0 1.25rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.search-bar__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: .9rem .5rem;
+  font-size: 1rem;
+  font-family: var(--font-ui);
+  color: var(--color-text);
+  min-width: 0;
+}
+
+.search-bar__input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: .8;
+}
+
+/* Clear button — visible when there's text (JS will toggle visibility) */
+.search-bar__clear {
+  flex-shrink: 0;
+  padding: .5rem .75rem;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: .8rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  margin-right: .25rem;
+  transition: color .18s;
+  /* JS will set visibility: visible when input has value */
+  visibility: hidden;
+}
+
+.search-bar__clear:hover {
+  color: var(--color-text);
+}
+
+.search-bar__submit {
+  flex-shrink: 0;
+  padding: .65rem 1.4rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  font-size: .9rem;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: background .18s;
+  border-radius: 0;
+  height: 100%;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar__submit:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* ============================================================
+   FILTER / SORT TOOLBAR
+   ============================================================ */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--gap-section);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-toolbar__label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  margin-right: .25rem;
+}
+
+/* Shared styles for filter selects and inputs */
+.filter-select,
+.filter-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: .48rem .85rem;
+  font-size: .88rem;
+  font-family: var(--font-ui);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color .18s, box-shadow .18s;
+  min-width: 130px;
+}
+
+.filter-select {
+  /* Custom dropdown arrow using background SVG */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2366706C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .7rem center;
+  padding-right: 2rem;
+}
+
+.filter-select:hover,
+.filter-input:hover {
+  border-color: #b5b0a4;
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(36,70,58,.1);
+}
+
+.filter-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: .8;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 28px;
+  background-color: var(--color-border);
+  flex-shrink: 0;
+}
+
+.filter-toolbar__clear {
+  margin-left: auto;
+}
+
+/* ============================================================
+   RESULTS SUMMARY BAR
+   ============================================================ */
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.results-bar__count {
+  font-size: .9rem;
+  color: var(--color-text-secondary);
+}
+
+.results-bar__count strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* ============================================================
+   BOOK GRID
+   ============================================================ */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: var(--gap-section);
+}
+
+/* ── Single Book Card ──
+   JS will use:
+   - .book-card           — to enumerate all cards
+   - data-book-id         — to identify which book was acted upon
+   - .view-book-btn       — to open detail view
+   - .edit-book-btn       — to open edit form
+   - .delete-book-btn     — to trigger delete confirmation
+*/
+.book-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .22s, transform .22s, border-color .22s;
+  position: relative;
+}
+
+/* Signature element: gold spine accent on hover */
+.book-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--color-gold);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .25s ease;
+}
+
+.book-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+  border-color: #c9c3b7;
+}
+
+.book-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* Book cover area */
+.book-card__cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background-color: var(--color-bg);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Placeholder cover with a subtle pattern and color variation */
+.book-card__cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: .75rem;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+}
+
+/* Faux cover lines/decoration */
+.book-card__cover-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 2px;
+}
+
+/* Color variants for cover placeholders */
+.cover-color-1 { background-color: #2d5a45; }
+.cover-color-2 { background-color: #4a3728; }
+.cover-color-3 { background-color: #2b4a6a; }
+.cover-color-4 { background-color: #5c3d5c; }
+.cover-color-5 { background-color: #3d4a2d; }
+.cover-color-6 { background-color: #6a4520; }
+
+.cover-placeholder-title {
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.cover-placeholder-icon {
+  font-size: 2rem;
+  opacity: .35;
+  margin-bottom: .25rem;
+}
+
+/* Genre badge overlaid on cover */
+.book-card__genre-badge {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  background-color: rgba(0,0,0,.45);
+  color: rgba(255,255,255,.9);
+  font-size: .7rem;
+  font-weight: 600;
+  padding: .2rem .55rem;
+  border-radius: 99px;
+  letter-spacing: .04em;
+  backdrop-filter: blur(4px);
+  text-transform: uppercase;
+}
+
+/* Book card body */
+.book-card__body {
+  padding: 1rem 1rem .75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: .25rem;
+}
+
+.book-card__title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3;
+  /* Clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-card__author {
+  font-size: .83rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-card__meta {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: .35rem;
+  font-size: .78rem;
+  color: var(--color-text-secondary);
+}
+
+.book-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+/* ── Card Actions ── */
+.book-card__actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1rem .85rem;
+  border-top: 1px solid var(--color-border);
+  margin-top: auto;
+}
+
+/* "View Details" button — takes most of the row */
+.view-book-btn {
+  flex: 1;
+  padding: .5rem .75rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .83rem;
+  font-weight: 600;
+  font-family: var(--font-ui);
+  text-align: center;
+  cursor: pointer;
+  transition: background .18s;
+}
+
+.view-book-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Edit and Delete icon buttons sit to the right */
+.edit-book-btn {
+  composes: btn-icon-sm edit; /* fallback — class is set directly in HTML */
+}
+
+.delete-book-btn {}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+/* JS will set display: none (or remove hidden attribute) to toggle this */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+  gap: 1rem;
+}
+
+/* Decorative CSS-drawn bookshelf illustration */
+.empty-state__illustration {
+  width: 120px;
+  height: 90px;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Shelf plank */
+.empty-state__shelf {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: 2px;
+}
+
+/* Three ghost books on the shelf */
+.empty-state__books {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+}
+
+.empty-book {
+  border-radius: 2px 4px 4px 2px;
+  background-color: var(--color-border);
+  opacity: .5;
+}
+
+.empty-book:nth-child(1) { width: 18px; height: 60px; }
+.empty-book:nth-child(2) { width: 22px; height: 72px; opacity: .35; }
+.empty-book:nth-child(3) { width: 16px; height: 50px; }
+
+/* Dashed outline placeholder */
+.empty-state__placeholder {
+  width: 60px;
+  height: 80px;
+  border: 2px dashed var(--color-border);
+  border-radius: 4px;
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  opacity: .6;
+}
+
+.empty-state__heading {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.empty-state__text {
+  color: var(--color-text-secondary);
+  font-size: .95rem;
+  max-width: 36ch;
+  line-height: 1.55;
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding-top: .5rem;
+}
+
+.pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 .5rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: .88rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s;
+}
+
+.pagination__btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: rgba(36,70,58,.04);
+}
+
+.pagination__btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* Active page button */
+.pagination__btn.is-current {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.pagination__btn.is-current:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  color: var(--color-text-secondary);
+  font-size: .88rem;
+  user-select: none;
+}
+
+/* ============================================================
+   RESPONSIVE — Tablet (≤ 900px)
+   ============================================================ */
+@media (max-width: 900px) {
+  .main-content {
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .filter-toolbar {
+    gap: .6rem;
+  }
+
+  .filter-select,
+  .filter-input {
+    min-width: 110px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile (≤ 640px)
+   ============================================================ */
+@media (max-width: 640px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .site-header__inner {
+    padding: 0 1rem;
+  }
+
+  .site-logo__text {
+    font-size: 1.15rem;
+  }
+
+  .site-nav__list {
+    gap: 0;
+  }
+
+  .site-nav__link {
+    padding: .4rem .65rem;
+    font-size: .82rem;
+  }
+
+  .account-placeholder {
+    width: 30px;
+    height: 30px;
+  }
+
+  .main-content {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .library-hero {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .library-hero__heading {
+    font-size: 1.6rem;
+  }
+
+  .library-hero__actions {
+    width: 100%;
+  }
+
+  .library-hero__actions .btn-primary {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .search-bar__submit {
+    padding: .65rem 1rem;
+    font-size: .82rem;
+  }
+
+  /* Filter toolbar stacks on mobile */
+  .filter-toolbar {
+    padding: .85rem 1rem;
+    gap: .6rem;
+  }
+
+  .filter-toolbar__label {
+    width: 100%;
+  }
+
+  .filter-select,
+  .filter-input {
+    flex: 1 1 calc(50% - .3rem);
+    min-width: 0;
+  }
+
+  .filter-divider {
+    display: none;
+  }
+
+  .filter-toolbar__clear {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .filter-toolbar__clear .btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .book-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .book-card__body {
+    padding: .75rem .75rem .5rem;
+  }
+
+  .book-card__actions {
+    padding: .5rem .75rem .7rem;
+  }
+
+  .book-card__title {
+    font-size: .9rem;
+  }
+
+  .results-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+
+  .pagination {
+    gap: .3rem;
+  }
+
+  .pagination__btn {
+    min-width: 34px;
+    height: 34px;
+    font-size: .82rem;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
