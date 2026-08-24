@@ -13,24 +13,32 @@ async function getAllBooks(req,res,next){
         }
         const filters=Object.fromEntries(Object.entries(queryParams).filter(([key])=>{return allowedFilters.includes(key)}));
         const sortBy=queryParams.sortBy;
-        const page=queryParams.page;
-        const limit=queryParams.limit;
-        if((page <=0 ||!Number.isInteger(Number(page))) || (limit <=0  || !Number.isInteger(Number(limit)))){
+        let page=1
+        let limit=10;
+        if(queryParams.page!==undefined ){
+             page=+queryParams.page;
+
+        }
+         if(queryParams.limit!==undefined){
+             limit=+queryParams.limit
+
+        }
+     
+
+        if((page <=0 ||!Number.isInteger(page)) || (limit <=0  || !Number.isInteger(limit))){
             return res.status(400).json({error:`Invalid page or limit value`});
         }
+       const skip = (page - 1) * limit
         
             const invalidSortBy=sortBy && !allowedSortByValues.includes(sortBy);
             if(invalidSortBy){
                 return res.status(400).json({error:`Invalid sortBy value: ${sortBy}`});
             }
    
-        if(Object.keys(filters).length>0 || sortBy){
-            const books = await getAllBooksService(filters, sortBy);
+        
+            const books = await getAllBooksService(filters, sortBy,skip, limit);
             res.status(200).json(books);
-        }else{
-            const books = await getAllBooksService();
-            res.status(200).json(books);
-        }
+        
     }catch (err) {
         next(err);
     }

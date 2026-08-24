@@ -1,20 +1,19 @@
 const Book=require('../models/book.model')
 
 
-async function getAllBooksService(filters,sortBy){
+async function getAllBooksService(filters={},sortBy,skip,limit){
  
+    
+    const query=Book.find(filters)
     if(sortBy!==undefined){
-        const books= await Book.find(filters).sort({[sortBy]:1})
-        return books;
-    }else if(filters && Object.keys(filters).length>0){
-    
-      const books= await Book.find(filters)
-      return books;
+       query.sort({[sortBy]:1})
+       
     }
-     const books=await Book.find({})
-
+  const books= await query.skip(skip).limit(limit)
     return books;
-    
+       
+
+
 
 }
 
