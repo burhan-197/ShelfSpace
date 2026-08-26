@@ -5,6 +5,7 @@ async function getBookByIdService(id){
 
 
     const book=await Book.findById(id)
+    
     if(!book){
         throw new AppError('Book not found', 404)
     }
