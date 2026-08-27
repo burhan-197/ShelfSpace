@@ -1,0 +1,371 @@
+/* ============================================================
+   HEADER / NAVIGATION
+   ============================================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background-color: var(--color-primary);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+}
+
+/* Logo */
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  text-decoration: none;
+}
+
+.site-logo__mark {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+/* CSS book-spine marks for the logo */
+.site-logo__mark span {
+  display: block;
+  background-color: var(--color-gold);
+  border-radius: 1px;
+  width: 4px;
+}
+
+.site-logo__mark span:nth-child(1) { height: 18px; }
+.site-logo__mark span:nth-child(2) { height: 24px; }
+.site-logo__mark span:nth-child(3) { height: 20px; }
+.site-logo__mark span:nth-child(4) { height: 16px; }
+.site-logo__mark span:nth-child(5) { height: 22px; }
+
+.site-logo__text {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .01em;
+}
+
+.site-logo__text em {
+  color: var(--color-gold);
+  font-style: normal;
+}
+/* =========================
+   SITE NAVIGATION
+   ========================= */
+
+.site-nav {
+    display: flex;
+    align-items: center;
+}
+
+.site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.site-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    padding: 0.45rem 0.9rem;
+
+    border-radius: var(--radius-sm);
+
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    transition:
+        background-color 0.18s,
+        color 0.18s;
+}
+
+.site-nav__link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.site-nav__link.is-active {
+    color: #fff;
+
+    background-color: rgba(199, 147, 70, 0.2);
+
+    border-bottom: 2px solid var(--color-gold);
+}
+/* =========================
+   RESPONSIVE HEADER
+   ========================= */
+
+@media (max-width: 700px) {
+    .site-header__inner {
+        padding: 0 1rem;
+    }
+
+    .site-logo {
+        gap: 0.4rem;
+    }
+
+    .site-logo__text {
+        font-size: 1.1rem;
+    }
+
+    .site-nav__link {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-logo__mark span {
+        width: 3px;
+    }
+
+    .site-logo__mark span:nth-child(1) { height: 15px; }
+    .site-logo__mark span:nth-child(2) { height: 20px; }
+    .site-logo__mark span:nth-child(3) { height: 17px; }
+    .site-logo__mark span:nth-child(4) { height: 14px; }
+    .site-logo__mark span:nth-child(5) { height: 18px; }
+
+    .site-logo__text {
+        font-size: 1rem;
+    }
+
+    .site-nav__list {
+        gap: 0.1rem;
+    }
+
+    .site-nav__link {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.76rem;
+    }
+}
+/* =========================
+   BUTTON SYSTEM
+   ========================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    padding: 0.65rem 1.25rem;
+
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s,
+        color 0.18s,
+        border-color 0.18s,
+        box-shadow 0.18s,
+        transform 0.1s;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn--primary {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.btn--primary:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn--secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn--secondary:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.btn--ghost {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn--danger {
+    background-color: transparent;
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.btn--danger:hover {
+    background-color: rgba(181, 71, 71, 0.08);
+}
+/* =========================
+   CARD / SURFACE
+   ========================= */
+
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+/* =========================
+   FORM CONTROLS
+   ========================= */
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 0.4rem;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    color: var(--color-text);
+}
+
+.required-mark {
+    color: var(--color-gold);
+}
+
+.form-input {
+    width: 100%;
+
+    padding: 0.65rem 0.75rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    background-color: var(--color-surface);
+    color: var(--color-text);
+
+    font-size: 0.95rem;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.form-input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+}
+
+.form-input:hover {
+    border-color: var(--color-gold);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(36, 70, 58, 0.15);
+}
+
+.form-select {
+    appearance: none;
+    padding-right: 2rem;
+}
+
+.field-error {
+    min-height: 1.1em;
+    margin-top: 0.4rem;
+
+    font-size: 0.8rem;
+
+    color: var(--color-danger);
+}
+/* =========================
+   STATUS BANNERS
+   ========================= */
+
+.status-banner {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+
+    border-radius: var(--radius-sm);
+
+    font-size: 0.9rem;
+}
+
+.status-banner--error {
+    background-color: rgba(181, 71, 71, 0.08);
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+}
+
+.status-banner--success {
+    background-color: rgba(36, 70, 58, 0.08);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.status-banner[hidden] {
+    display: none;
+}
+/* =========================
+   LOADING SPINNER
+   ========================= */
+
+.spinner {
+    display: inline-block;
+
+    width: 2rem;
+    height: 2rem;
+
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner--small {
+    width: 1rem;
+    height: 1rem;
+    border-width: 2px;
+}
+
+.spinner--large {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

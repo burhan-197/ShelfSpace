@@ -13,7 +13,6 @@
        HEADER / SITE NAVIGATION
        - Logo: .site-logo
        - Nav links: .site-nav__link  (active page gets .is-active)
-       - Account placeholder: .site-header__account (for future auth)
        ============================================================ -->
   <header class="site-header" role="banner">
     <div class="site-header__inner">
@@ -47,14 +46,6 @@
         </ul>
       </nav>
 
-      <!-- Account area — placeholder for future profile / auth dropdown -->
-      <div class="site-header__account" aria-label="Account area">
-        <!-- JS will replace this with user avatar / menu when auth is added -->
-        <div class="account-placeholder" aria-hidden="true" title="Profile (coming soon)">
-          &#128100;
-        </div>
-      </div>
-
     </div>
   </header>
   <!-- END HEADER -->
@@ -83,7 +74,7 @@
           id="upload-book-btn": JS will use this to navigate to the upload page
           or open an upload modal when the feature is wired up.
         -->
-        <a href="/upload" class="btn-primary" id="upload-book-btn">
+        <a href="/upload" class="btn btn--primary" id="upload-book-btn">
           <span class="btn-icon" aria-hidden="true">＋</span>
           Upload Book
         </a>
@@ -158,7 +149,7 @@
 
       <!-- Genre filter -->
       <label for="filter-genre" class="sr-only">Filter by genre</label>
-      <select id="filter-genre" class="filter-select" name="genre">
+      <select id="filter-genre" class="form-select" name="genre">
         <option value="">All Genres</option>
         <option value="fiction">Fiction</option>
         <option value="non-fiction">Non-Fiction</option>
@@ -179,7 +170,7 @@
       <input
         type="text"
         id="filter-author"
-        class="filter-input"
+        class="form-input"
         name="author"
         placeholder="Author…"
         aria-label="Filter by author name"
@@ -190,7 +181,7 @@
 
       <!-- Sort control -->
       <label for="filter-sort" class="sr-only">Sort books by</label>
-      <select id="filter-sort" class="filter-select" name="sort">
+      <select id="filter-sort" class="form-select" name="sort">
         <option value="title-asc">Title (A–Z)</option>
         <option value="title-desc">Title (Z–A)</option>
         <option value="author-asc">Author (A–Z)</option>
@@ -208,7 +199,7 @@
           id="clear-filters-btn": JS will reset all filter/sort controls
           and re-render the book grid when clicked.
         -->
-        <button type="button" id="clear-filters-btn" class="btn-ghost">
+        <button type="button" id="clear-filters-btn" class="btn btn--ghost">
           ✕ Clear Filters
         </button>
       </div>
@@ -375,91 +366,7 @@
         <!-- END BOOK CARD 3 -->
 
 
-        <!-- ── BOOK CARD 4 ── -->
-        <li class="book-card" data-book-id="bk-004" role="listitem">
-
-          <div class="book-card__cover" aria-hidden="true">
-            <div class="book-card__cover-placeholder cover-color-4">
-              <span class="cover-placeholder-icon">📖</span>
-              <span class="cover-placeholder-title">Meditations</span>
-            </div>
-            <span class="book-card__genre-badge">Philosophy</span>
-          </div>
-
-          <div class="book-card__body">
-            <h2 class="book-card__title">Meditations</h2>
-            <p class="book-card__author">Marcus Aurelius</p>
-            <div class="book-card__meta">
-              <span class="book-card__meta-item">📅 ~180 AD</span>
-              <span class="book-card__meta-item">📄 254 pp.</span>
-            </div>
-          </div>
-
-          <div class="book-card__actions">
-            <button type="button"
-                    class="view-book-btn"
-                    aria-label="View details for Meditations">
-              View Details
-            </button>
-            <button type="button"
-                    class="btn-icon-sm edit edit-book-btn"
-                    aria-label="Edit Meditations">
-              ✏️
-            </button>
-            <button type="button"
-                    class="btn-icon-sm delete delete-book-btn"
-                    aria-label="Delete Meditations">
-              🗑
-            </button>
-          </div>
-
-        </li>
-        <!-- END BOOK CARD 4 -->
-
-
-        <!-- ── BOOK CARD 5 ── -->
-        <li class="book-card" data-book-id="bk-005" role="listitem">
-
-          <div class="book-card__cover" aria-hidden="true">
-            <div class="book-card__cover-placeholder cover-color-5">
-              <span class="cover-placeholder-icon">📖</span>
-              <span class="cover-placeholder-title">The Lean Startup</span>
-            </div>
-            <span class="book-card__genre-badge">Technology</span>
-          </div>
-
-          <div class="book-card__body">
-            <h2 class="book-card__title">The Lean Startup</h2>
-            <p class="book-card__author">Eric Ries</p>
-            <div class="book-card__meta">
-              <span class="book-card__meta-item">📅 2011</span>
-              <span class="book-card__meta-item">📄 336 pp.</span>
-            </div>
-          </div>
-
-          <div class="book-card__actions">
-            <button type="button"
-                    class="view-book-btn"
-                    aria-label="View details for The Lean Startup">
-              View Details
-            </button>
-            <button type="button"
-                    class="btn-icon-sm edit edit-book-btn"
-                    aria-label="Edit The Lean Startup">
-              ✏️
-            </button>
-            <button type="button"
-                    class="btn-icon-sm delete delete-book-btn"
-                    aria-label="Delete The Lean Startup">
-              🗑
-            </button>
-          </div>
-
-        </li>
-        <!-- END BOOK CARD 5 -->
-
-
-        <!-- ── BOOK CARD 6 ── -->
+        <!-- ── BOOK CARD 4── -->
         <li class="book-card" data-book-id="bk-006" role="listitem">
 
           <div class="book-card__cover" aria-hidden="true">
@@ -498,7 +405,7 @@
           </div>
 
         </li>
-        <!-- END BOOK CARD 6 -->
+        <!-- END BOOK CARD 4 -->
 
 
       </ul>
@@ -540,7 +447,7 @@
       </p>
 
       <!-- Links to upload page; JS can also wire this to navigate programmatically -->
-      <a href="/upload" class="btn-primary" aria-label="Upload your first book">
+      <a href="/upload" class="btn btn--primary" aria-label="Upload your first book">
         <span class="btn-icon" aria-hidden="true">＋</span>
         Upload your first book
       </a>

@@ -10,8 +10,15 @@ async function deleteBookByIdService(id){
             throw new AppError('Book not found',404)
         }
           
-       await fs.unlink(book.filePath)
-        return book
+     try{
+          await fs.unlink(book.filePath)
+     }catch(err){
+        if(err.code!=='ENOENT'){
+            console.error('Error deleting file:', err)
+            
+        }    
     
+}
+  return book
 }
 module.exports=deleteBookByIdService
