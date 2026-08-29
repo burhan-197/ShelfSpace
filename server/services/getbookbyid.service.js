@@ -13,4 +13,4 @@ async function getBookByIdService(id){
 
 
 }
-module.exports=getBookByIdService
+module.exports={getBookByIdService}

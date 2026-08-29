@@ -1,19 +1,22 @@
-const getBookByIdService=require('../services/getbookbyid.service')
-const path=require('path')
+const { getBookByIdService } = require('../services/getbookbyid.service');
 
-async function getBookById(req,res,next){
-const {id}=req.params
-try{
-  const book=await getBookByIdService(id)
-  const bookPath=path.join(__dirname,'..', book.filePath)
-  res.status(200).sendFile(bookPath,(err)=>{
-    if(err){
-      next(err)
+async function getBookById(req, res, next) {
+    const { id } = req.params;
+
+    try {
+        const book = await getBookByIdService(id);
+
+        res.status(200).render('book-detail', {
+            title: 'Book Details — ShelfSpace',
+            stylesheet: '/css/book_details.css',
+            script: '/js/book_details.js',
+            activePage: '',
+            book
+        });
+
+    } catch (err) {
+        next(err);
     }
-  })
+}
 
-}catch(err){
-    next(err)
-}
-}
-module.exports=getBookById
+module.exports = getBookById;

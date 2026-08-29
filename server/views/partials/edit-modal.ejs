@@ -1,0 +1,196 @@
+<!-- ─────────────────────────────────────────
+     EDIT BOOK MODAL
+───────────────────────────────────────── -->
+
+<div
+  id="edit-modal"
+  class="modal-backdrop hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="edit-modal-title"
+>
+  <div class="modal-card">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-icon" aria-hidden="true">✏️</span>
+        <h2 id="edit-modal-title" class="modal-title">
+          Edit Book Details
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-btn"
+        id="edit-close-btn"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-divider" aria-hidden="true"></div>
+
+    <!-- Edit Form -->
+    <form
+      class="edit-form"
+      id="edit-book-form"
+      novalidate
+    >
+
+      <!-- Title -->
+      <div class="form-row">
+        <div class="form-group form-group--full">
+
+          <label for="edit-book-title">Title</label>
+
+          <input
+            type="text"
+            id="edit-book-title"
+            name="title"
+            placeholder="e.g. The Midnight Library"
+          />
+
+        </div>
+      </div>
+
+      <!-- Author + Genre -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label for="edit-book-author">Author</label>
+
+          <input
+            type="text"
+            id="edit-book-author"
+            name="author"
+            placeholder="e.g. Matt Haig"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="edit-book-genre">Genre</label>
+
+          <div class="select-wrapper">
+
+            <select
+              id="edit-book-genre"
+              name="genre"
+            >
+              <option value="">Select genre…</option>
+              <option value="fiction">Fiction</option>
+              <option value="non-fiction">Non-Fiction</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="sci-fi">Science Fiction</option>
+              <option value="mystery">Mystery</option>
+              <option value="biography">Biography</option>
+              <option value="history">History</option>
+              <option value="self-help">Self-Help</option>
+              <option value="other">Other</option>
+            </select>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pages + Publish Date -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label for="edit-book-pages">Pages</label>
+
+          <input
+            type="number"
+            id="edit-book-pages"
+            name="pages"
+            placeholder="e.g. 304"
+            min="1"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="edit-book-publish-date">
+            Publish Date
+          </label>
+
+          <input
+            type="date"
+            id="edit-book-publish-date"
+            name="publishDate"
+          />
+
+        </div>
+
+      </div>
+
+      <!-- PDF Upload -->
+      <div class="form-group">
+
+        <label for="edit-book-pdf">PDF File</label>
+
+        <div
+          class="upload-zone"
+          tabindex="0"
+          role="button"
+          aria-label="Upload replacement PDF"
+        >
+
+          <input
+            type="file"
+            id="edit-book-pdf"
+            name="bookFile"
+            accept=".pdf,application/pdf"
+            aria-label="Choose PDF file"
+          />
+
+          <span class="upload-icon" aria-hidden="true">
+            📄
+          </span>
+
+          <div class="upload-text">
+            <strong>Replace PDF</strong>
+            <span id="upload-file-label">
+              Keep current PDF
+            </span>
+          </div>
+
+          <span class="upload-badge">PDF</span>
+
+        </div>
+
+      </div>
+
+    </form>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+
+      <button
+        type="button"
+        id="cancel-edit-btn"
+        class="btn btn--secondary"
+      >
+        Cancel
+      </button>
+
+      <button
+        id="confirm-edit-btn"
+        class="btn btn--primary"
+        form="edit-book-form"
+        type="submit"
+      >
+        Save Changes
+      </button>
+
+    </div>
+
+  </div>
+</div>

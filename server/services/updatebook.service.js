@@ -17,17 +17,15 @@ async function updateBookService(id,updateData){
     }
 
      const newFilePath=updateData.filePath
-     if(newFilePath){
-        try{
-            await fs.unlink(oldFilePath)
-        }catch(err){
-            if(err.code!=='ENOENT'){
-                console.error('Error deleting old file',err)
-            }
-            
+     if (newFilePath && oldFilePath) {
+    try {
+        await fs.unlink(oldFilePath);
+    } catch (err) {
+        if (err.code !== 'ENOENT') {
+            console.error('Error deleting old file', err);
         }
-     }  
-
+    }
+}
     return book
 
 

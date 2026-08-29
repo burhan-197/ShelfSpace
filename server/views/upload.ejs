@@ -1,0 +1,231 @@
+
+
+  <!-- ============================================================
+       SITE HEADER / NAVIGATION
+       Same header style as the Library page.
+       "Upload Book" nav link carries the "nav-link--active" class
+       so it is visually marked as the current page.
+  ============================================================ -->
+ 
+
+  <!-- ============================================================
+       MAIN PAGE CONTAINER
+       Centered container that holds the page heading + form card.
+  ============================================================ -->
+  <main class="page-container">
+
+    <!-- Page heading / subtitle -->
+    <section class="page-heading">
+      <h1 class="page-heading__title">Upload a Book</h1>
+      <p class="page-heading__subtitle">
+        Add a new title to ShelfSpace. Fill in the book's details below and
+        upload a cover image along with the readable file.
+      </p>
+    </section>
+
+    <!-- ==========================================================
+         UPLOAD BOOK FORM CARD
+         Form ID "upload-book-form" is the main hook JS will use
+         to attach a submit listener and run FormData handling.
+    ========================================================== -->
+    <section class="card form-card">
+      <form id="upload-book-form" class="upload-form" novalidate>
+
+        <!-- General form-level error banner.
+             JS-hook: id="form-error-message"
+             Kept empty and hidden by default; JS can populate text
+             and toggle the "is-visible" class when a submit-level
+             error occurs (e.g. network/server error). -->
+        <div id="form-error-message" class="status-banner status-banner--error" role="alert" hidden></div>
+
+        <!-- General form-level success banner.
+             JS-hook: id="form-success-message"
+             Kept empty and hidden by default; JS can populate text
+             and toggle "is-visible" after a successful upload. -->
+        <div id="form-success-message" class="status-banner status-banner--success" role="status" hidden></div>
+
+        <!-- ------------------------------------------------------
+             METADATA FIELDS
+             Two-column layout on large screens, single column
+             on mobile (see .form-grid in CSS).
+        ------------------------------------------------------ -->
+        <div class="form-grid">
+
+          <!-- Title -->
+          <div class="form-field">
+            <label for="book-title" class="form-label">
+              Title <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="book-title"
+              name="title"
+              class="form-input"
+              placeholder="e.g. The Midnight Library"
+              autocomplete="off"
+              required
+              aria-describedby="book-title-error"
+            >
+            <!-- JS-hook: id="book-title-error" — fill with validation text -->
+            <p id="book-title-error" class="field-error"></p>
+          </div>
+
+          <!-- Author -->
+          <div class="form-field">
+            <label for="book-author" class="form-label">
+              Author <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              id="book-author"
+              name="author"
+              class="form-input"
+              placeholder="e.g. Matt Haig"
+              autocomplete="off"
+              required
+              aria-describedby="book-author-error"
+            >
+            <!-- JS-hook: id="book-author-error" -->
+            <p id="book-author-error" class="field-error"></p>
+          </div>
+
+          <!-- Genre -->
+          <div class="form-field">
+            <label for="book-genre" class="form-label">
+              Genre <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <select
+              id="book-genre"
+              name="genre"
+              class="form-input form-select"
+              required
+              aria-describedby="book-genre-error"
+            >
+              <option value="" selected disabled>Select a genre</option>
+              <option value="fiction">Fiction</option>
+              <option value="non-fiction">Non-Fiction</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="sci-fi">Science Fiction</option>
+              <option value="mystery">Mystery &amp; Thriller</option>
+              <option value="romance">Romance</option>
+              <option value="biography">Biography</option>
+              <option value="history">History</option>
+              <option value="self-help">Self-Help</option>
+              <option value="other">Other</option>
+            </select>
+            <!-- JS-hook: id="book-genre-error" -->
+            <p id="book-genre-error" class="field-error"></p>
+          </div>
+
+          <!-- Number of pages -->
+          <div class="form-field">
+            <label for="book-pages" class="form-label">
+              Number of Pages <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="number"
+              id="book-pages"
+              name="pages"
+              class="form-input"
+              placeholder="e.g. 312"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              required
+              aria-describedby="book-pages-error"
+            >
+            <!-- JS-hook: id="book-pages-error" -->
+            <p id="book-pages-error" class="field-error"></p>
+          </div>
+
+          <!-- Publish date -->
+          <div class="form-field">
+            <label for="book-publish-date" class="form-label">
+              Publish Date <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="date"
+              id="book-publish-date"
+              name="publishDate"
+              class="form-input"
+              required
+              aria-describedby="book-publish-date-error"
+            >
+            <!-- JS-hook: id="book-publish-date-error" -->
+            <p id="book-publish-date-error" class="field-error"></p>
+          </div>
+
+        </div><!-- /.form-grid -->
+
+        <!-- ------------------------------------------------------
+             FILE UPLOAD AREAS
+             Styled as "drop zones" visually, but each is a real,
+             accessible <input type="file"> underneath — no drag
+             and drop JS is implemented here, only presentation.
+        ------------------------------------------------------ -->
+        <div class="form-grid form-grid--uploads">
+
+         
+          <!-- Book file upload (reader file) -->
+          <div class="form-field">
+            <label for="book-file" class="form-label">
+              Book File <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+
+            <label for="book-file" class="upload-zone">
+              <span class="upload-zone__icon" aria-hidden="true">📄</span>
+              <span class="upload-zone__title">Click to choose a book file</span>
+              <!-- Explicit note that only PDF is supported in the
+                   first reader version -->
+              <span class="upload-zone__hint">
+                Currently supported format: <strong>PDF only</strong> · Max 50MB
+              </span>
+              <input
+                type="file"
+                id="book-file"
+                name="bookFile"
+                class="upload-zone__input"
+                accept="application/pdf"
+                required
+                aria-describedby="book-file-error"
+              >
+            </label>
+            <!-- JS-hook: id="book-file-error" -->
+            <p id="book-file-error" class="field-error"></p>
+          </div>
+
+        </div><!-- /.form-grid--uploads -->
+
+        <!-- ------------------------------------------------------
+             FORM ACTIONS
+             Primary submit + secondary cancel.
+             Submit button includes a hidden/example loading state
+             span that JS can toggle visibility on later.
+        ------------------------------------------------------ -->
+        <div class="form-actions">
+
+          <!-- Secondary action: cancel -->
+          <button type="button" id="cancel-upload-btn" class="btn btn--secondary">
+            Cancel
+          </button>
+
+          <!-- Primary action: submit -->
+          <button type="submit" id="submit-upload-btn" class="btn btn--primary">
+            <!-- Default label text -->
+            <span class="btn__label">Upload Book</span>
+            <!-- Example loading state markup, hidden by default.
+                 JS-hook: toggle "hidden" attribute (or a class) on
+                 #submit-upload-btn and this span to show a spinner
+                 + "Uploading..." text while the request is in flight. -->
+            <span class="btn__loading" id="submit-upload-loading" hidden>
+              <span class="spinner spinner--small" aria-hidden="true"></span>
+              Uploading&hellip;
+            </span>
+          </button>
+
+        </div><!-- /.form-actions -->
+
+      </form>
+    </section>
+
+  </main>

@@ -1,0 +1,415 @@
+
+
+  <!-- ============================================================
+       HEADER / SITE NAVIGATION
+       - Logo: .site-logo
+       - Nav links: .site-nav__link  (active page gets .is-active)
+       ============================================================ -->
+
+  <!-- END HEADER -->
+
+
+  <!-- ============================================================
+       MAIN CONTENT AREA
+       ============================================================ -->
+  <main class="main-content" id="main" role="main">
+
+ <%- include('partials/delete-modal') %>
+  <%- include('partials/edit-modal') %>
+    <!-- ============================================================
+         LIBRARY HERO — Page heading, subtitle, and Upload CTA
+         ============================================================ -->
+    <section class="library-hero" aria-labelledby="library-heading">
+
+      <div class="library-hero__text">
+        <h1 class="library-hero__heading" id="library-heading">Your Library</h1>
+        <p class="library-hero__subtitle">
+          Browse, search, and manage all your uploaded books in one place.
+        </p>
+      </div>
+
+      <div class="library-hero__actions">
+        <!--
+          id="upload-book-btn": JS will use this to navigate to the upload page
+          or open an upload modal when the feature is wired up.
+        -->
+        <a href="/upload" class="btn btn--primary" id="upload-book-btn">
+          <span class="btn-icon" aria-hidden="true">＋</span>
+          Upload Book
+        </a>
+      </div>
+
+    </section>
+    <!-- END LIBRARY HERO -->
+
+
+    <!-- ============================================================
+         SEARCH BAR
+         - id="book-search"  → JS will read this value on input/submit
+         - id="search-clear" → JS will show/hide and clear the input
+         - id="search-form"  → JS can intercept submit to run client-side search
+         ============================================================ -->
+    <section class="search-section" aria-label="Search your library">
+
+      <form action="/" method="get" class="search-bar" role="search" id="search-form">
+
+        <!-- Accessible label is provided by aria-label on the input -->
+        <span class="search-bar__icon-glyph" aria-hidden="true">&#128269;</span>
+
+        <input
+          type="search"
+          id="book-search"
+          name="q"
+          class="search-bar__input"
+          placeholder="Search by title or author…"
+          aria-label="Search books by title or author"
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <!--
+          id="search-clear": JS should set visibility: visible when #book-search has a value,
+          and clear the input on click.
+        -->
+        <button
+          type="button"
+          id="search-clear"
+          class="search-bar__clear"
+          aria-label="Clear search"
+        >
+          ✕ Clear
+        </button>
+
+        <button
+          type="submit"
+          class="search-bar__submit"
+          aria-label="Search"
+        >
+          Search
+        </button>
+
+      </form>
+
+    </section>
+    <!-- END SEARCH BAR -->
+
+
+    <!-- ============================================================
+         FILTER / SORT TOOLBAR
+         Each control has a unique ID for JavaScript to read values from.
+
+         JS flow:
+         - Read #filter-genre, #filter-author, #filter-sort on change
+         - id="clear-filters-btn" → reset all controls to default
+         ============================================================ -->
+    <section class="filter-toolbar" aria-label="Filter and sort books">
+
+      <span class="filter-toolbar__label" aria-hidden="true">Filter:</span>
+
+      <!-- Genre filter -->
+      <label for="filter-genre" class="sr-only">Filter by genre</label>
+     <form action="/" method="get" id="filter-form">
+      <select id="filter-genre" class="form-select" name="genre">
+        <option value="">All Genres</option>
+        <% genres.forEach((genre) => { %>
+          <option value="<%= genre %>" <% if (genre === selectedGenre) { %>selected<% } %>><%= genre.charAt(0).toUpperCase() + genre.slice(1) %></option>
+        <% }) %>
+      </select>
+        <label for="filter-author" class="sr-only">Filter by author name</label>
+      <input
+        type="text"
+        value="<%= selectedAuthor %>"
+        id="filter-author"
+        class="form-input"
+        name="author"
+        placeholder="Author…"
+        aria-label="Filter by author name"
+        autocomplete="off"
+      />
+      </form>
+
+      
+    
+     
+
+      <!-- Clear all filters -->
+      <div class="filter-toolbar__clear">
+        <!--
+          id="clear-filters-btn": JS will reset all filter/sort controls
+          and re-render the book grid when clicked.
+        -->
+        <a href="/" id="clear-filters-btn" class="btn btn--ghost">
+          ✕ Clear Filters
+        </a>
+      </div>
+
+    </section>
+    <!-- END FILTER TOOLBAR -->
+
+
+    <!-- ============================================================
+         RESULTS SUMMARY BAR
+         JS will update:
+         - #results-count → display "Showing X of Y books"
+         ============================================================ -->
+    <div class="results-bar" aria-live="polite" aria-atomic="true">
+      <p class="results-bar__count">
+        Showing <strong id="results-count"><%= books.length %></strong> of <strong><%= totalBooks %></strong> books
+      </p>
+    </div>
+
+
+    <!-- ============================================================
+         BOOK GRID
+         - Each card uses class="book-card" (no unique per-card ID)
+         - data-book-id is the key JS uses to identify which book was interacted with
+         - .view-book-btn / .edit-book-btn / .delete-book-btn are reusable class hooks
+         - Genre badges, meta info, etc. use semantic classes for easy querySelectorAll
+         ============================================================ -->
+    <section aria-label="Book collection">
+
+      <ul class="book-grid" id="book-grid" role="list">
+
+
+        <!-- ── BOOK CARD 1 ── -->
+      <% if(books.length===0){%>
+        <p>No books found</p>
+      <% }else{ %>
+        <%books.forEach((book)=>{%>
+            <li class="book-card" data-book-id="<%= book._id %>" role="listitem">
+
+          <!-- Cover placeholder — JS can replace with <img> when a cover URL exists -->
+          <div class="book-card__cover" aria-hidden="true">
+            <div class="book-card__cover-placeholder cover-color-1">
+              <span class="cover-placeholder-icon">📖</span>
+              <span class="cover-placeholder-title"><%= book.title %></span>
+            </div>
+            <!-- Genre badge overlaid on the cover -->
+            <span class="book-card__genre-badge"><%= book.genre %></span>
+          </div>
+
+          <div class="book-card__body">
+            <h2 class="book-card__title"><%= book.title %></h2>
+            <p class="book-card__author"><%= book.author %></p>
+            <div class="book-card__meta">
+              <span class="book-card__meta-item">📅 <%= book.publishDate %></span>
+              <span class="book-card__meta-item">📄 <%= book.pages %> pp.</span>
+            </div>
+          </div>
+
+          <!-- Card action buttons — JS attaches event listeners by class -->
+          <div class="book-card__actions">
+            <!--
+              .view-book-btn → JS reads closest .book-card[data-book-id] to navigate
+              .edit-book-btn → JS opens edit form for this book
+              .delete-book-btn → JS shows delete confirmation modal
+            -->
+            <a href="/details/<%= book._id %>"
+                    class="view-book-btn"
+                    aria-label="View details for  <%= book.title %>">
+              View Details
+          </a>
+            <button type="button"
+                    class="btn-icon-sm edit edit-book-btn"
+                    aria-label="Edit  <%= book.title %>"
+                     data-book-id="<%= book._id %>">
+                   
+              ✏️
+            </button>
+            <button type="button"
+                    class="btn-icon-sm delete delete-book-btn"
+                    data-book-id="<%= book._id %>"
+
+                    aria-label="Delete  <%= book.title %>">
+              🗑
+            </button>
+          </div>
+
+        </li>
+
+        <%}) %>
+      <% } %>
+        <!-- END BOOK CARD 1 -->
+
+
+
+
+      </ul>
+    </section>
+    <!-- END BOOK GRID -->
+
+
+    <!-- ============================================================
+         EMPTY STATE
+         id="empty-state": JS sets this to display:none when books exist,
+         or display:flex when the grid is empty (search/filter returns nothing).
+         Default display is "none" (books are showing above on page load).
+
+         Also used when the library truly has zero books uploaded yet.
+         The "Upload your first book" button mirrors #upload-book-btn above.
+         ============================================================ -->
+    <section
+      id="empty-state"
+      class="empty-state"
+      aria-label="No books found"
+      aria-live="polite"
+      style="display: none;"
+    >
+
+      <!-- CSS-drawn bookshelf illustration -->
+      <div class="empty-state__illustration" aria-hidden="true">
+        <div class="empty-state__books">
+          <div class="empty-book"></div>
+          <div class="empty-book"></div>
+          <div class="empty-book"></div>
+        </div>
+        <div class="empty-state__placeholder"></div>
+        <div class="empty-state__shelf"></div>
+      </div>
+
+      <h2 class="empty-state__heading">No books found</h2>
+      <p class="empty-state__text">
+        Try adjusting your search or filters, or upload a new book to get started.
+      </p>
+
+      <!-- Links to upload page; JS can also wire this to navigate programmatically -->
+      <a href="/upload" class="btn btn--primary" aria-label="Upload your first book">
+        <span class="btn-icon" aria-hidden="true">＋</span>
+        Upload your first book
+      </a>
+
+    </section>
+    <!-- END EMPTY STATE -->
+
+
+    <!-- ============================================================
+         PAGINATION
+         id="pagination"        → JS can hide when results fit one page
+         id="pagination-prev"   → JS disables on first page
+         id="pagination-next"   → JS disables on last page
+         .pagination__btn       → JS reads data-page attribute to jump to a page
+         .is-current            → JS adds this class to the active page button
+         ============================================================ -->
+    <nav
+      id="pagination"
+      class="pagination"
+      aria-label="Book list pagination"
+      role="navigation"
+    >
+
+      
+        <% if(paginationRange.hasPreviousPage){ %>
+        <a  href="?page=<%= paginationRange.previousPage %>" 
+        id="pagination-prev"
+        class="pagination__btn"
+        aria-label="Go to previous page">  &#8592; Prev</a>
+        <% }else{ %>
+           <button
+        type="button"
+        id="pagination-prev"
+        class="pagination__btn"
+        aria-label="Go to previous page"
+        disabled
+        
+      >
+        &#8592; Prev
+      </button>
+        <% } %>
+         <% if(paginationRange.startPage > 1){ %>
+           
+         
+        <a
+          href="?page=1"
+          class="pagination__btn"
+          data-page="1"
+          aria-label="Page1"
+        >
+         1
+        </a>
+        <span class="pagination__ellipsis" aria-hidden="true">…</span>
+      <% } %>     
+   
+
+      <!-- Page number buttons — JS will generate these dynamically;
+           these are static examples showing the pattern -->
+      <% paginationRange.pages.forEach((page) => { %>
+        <a
+          href="?page=<%= page %>"
+          class="pagination__btn <% if (page === currentPage) { %>is-current<% } %>"
+          data-page="<%= page %>"
+          aria-label="Page <%= page %>"
+          <% if (page === currentPage) { %>aria-current="page"<% } %>
+        >
+          <%= page %>
+        </a>
+      <% }) %>
+   
+
+     
+
+      <% if(paginationRange.endPage < totalPages){ %>
+           <span class="pagination__ellipsis" aria-hidden="true">…</span>
+         
+        <a
+          href="?page=<%= totalPages %>"
+          class="pagination__btn"
+          data-page="<%= totalPages %>"
+          aria-label="Page <%= totalPages %>"
+        >
+          <%= totalPages%>
+        </a>
+      <% } %>
+
+      <!-- Next page -->
+       <% if(paginationRange.hasNextPage){ %>
+        <a  href="?page=<%= paginationRange.nextPage %>" 
+        id="pagination-next"
+        class="pagination__btn"
+        aria-label="Go to next page">  Next &#8594;</a>
+        <% }else{ %>
+           <button
+        type="button"
+        id="pagination-next"
+        class="pagination__btn"
+        aria-label="Go to next page"
+        disabled
+    
+      >
+        &#8594; Next
+      </button>
+        <% } %>
+      
+    </nav>
+    <!-- END PAGINATION -->
+
+
+       
+      </button>
+      
+    </nav>
+    <!-- END PAGINATION -->
+
+
+  </main>
+  <!-- END MAIN CONTENT -->
+
+
+  <!-- ============================================================
+       SCREEN-READER ONLY UTILITY CLASS
+       Add .sr-only to labels that visually appear elsewhere but
+       need to exist in the DOM for accessibility.
+       ============================================================ -->
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+ 

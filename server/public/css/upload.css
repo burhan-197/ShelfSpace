@@ -1,0 +1,172 @@
+@import url("../css/global.css");
+@import url("../css/components.css");
+
+:root {
+  --max-content-width: 960px;
+  --max-form-width: 760px;
+}
+
+/* ============================================================
+   PAGE CONTAINER
+============================================================ */
+.page-container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* Page heading block */
+.page-heading {
+  max-width: var(--max-form-width);
+  margin: 0 auto 28px;
+  text-align: left;
+}
+
+.page-heading__title {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+.page-heading__subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  max-width: 60ch;
+}
+
+/* ============================================================
+   FORM CARD (extends shared .card)
+============================================================ */
+.form-card {
+  max-width: var(--max-form-width);
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* ============================================================
+   FORM LAYOUT — GRID OF FIELDS
+   Two columns on large screens, single column on mobile.
+============================================================ */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Upload zones always sit full-width, one above the other on
+   small screens, side-by-side on larger screens */
+.form-grid--uploads {
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   FILE UPLOAD "DROP ZONE" STYLE AREAS
+   Visual drop-zone styling only — no drag-and-drop JS behavior.
+   The <label> wraps a real <input type="file"> so the whole
+   area is clickable and remains fully accessible.
+============================================================ */
+.upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  padding: 28px 16px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.upload-zone:hover,
+.upload-zone:focus-within {
+  border-color: var(--color-gold);
+  background-color: rgba(199, 147, 70, 0.06);
+}
+
+.upload-zone__icon {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.upload-zone__title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.upload-zone__hint {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+/* The actual file input is visually hidden but still present in
+   the DOM and reachable via keyboard/label click — fully
+   accessible, not display:none (which some AT can mis-handle),
+   using a standard visually-hidden pattern instead. */
+.upload-zone__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   FORM ACTIONS (buttons row)
+============================================================ */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+/* Example loading state for the submit button.
+   Hidden by default via [hidden]; JS can hide .btn__label and
+   reveal .btn__loading while the upload request is in flight. */
+.btn__loading[hidden] {
+  display: none;
+}
+
+.btn__loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS
+============================================================ */
+@media (max-width: 480px) {
+  .form-card {
+    padding: 22px 18px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .page-heading__title {
+    font-size: 1.6rem;
+  }
+}

@@ -1,10 +1,17 @@
 const Book=require('../models/book.model')
 
 
-async function getAllBooksService(filters={},sortBy,skip,limit){
+async function getAllBooksService(filters={},sortBy,skip,limit,searchTerm){
  
+    if (searchTerm) {
+    filters.$or = [
+        { title: searchTerm },
+        { author: searchTerm }
+    ];
+}
     
     const query=Book.find(filters)
+
     if(sortBy!==undefined){
        query.sort({[sortBy]:1})
        

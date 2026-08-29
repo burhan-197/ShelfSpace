@@ -3,8 +3,9 @@ const fs=require('fs/promises')
 async function updateBook(req,res,next){
  try{
    const id=req.params.id
-   const updatedData=req.body
-
+   const updatedData = Object.fromEntries(
+    Object.entries(req.body).filter(([key, value]) => value !== '')
+);
    if(req.file){
       updatedData.filePath=req.file.path
    }

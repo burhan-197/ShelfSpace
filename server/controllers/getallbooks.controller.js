@@ -1,17 +1,26 @@
 const { getAllBooksService } = require('../services/getallbooks.service');
+const getPaginationRange = require('../utils/getPaginationRange');
 
 async function getAllBooks(req,res,next){
-    const allowedQueryParams = ['author', 'title', 'genre','sortBy','page','limit'];
+    const allowedQueryParams = ['author', 'title', 'genre','sortBy','page','limit','q'];
     const allowedFilters = ['author', 'title', 'genre'];
     const allowedSortByValues = ['title', 'author', 'genre','publishDate'];
+    const genres=['fiction','fantasy','non-fiction', 'action', 'science', 'history', 'biography', 'philosophy', 'poetry', 'other'];
 
     try {
         const queryParams=req.query;
+        const searchTerm = queryParams.q;
+       
         const invalidQueryParams=Object.keys(queryParams).filter((key)=>{return !allowedQueryParams.includes(key)});
         if(invalidQueryParams.length>0){
             return res.status(400).json({error:`Invalid query parameters: ${invalidQueryParams.join(', ')}`});
         }
-        const filters=Object.fromEntries(Object.entries(queryParams).filter(([key])=>{return allowedFilters.includes(key)}));
+    const filters = Object.fromEntries(
+    Object.entries(queryParams)
+        .filter(([key, value]) => {
+            return allowedFilters.includes(key) && value !== '';
+        })
+)
         const sortBy=queryParams.sortBy;
         let page=1
         let limit=10;
@@ -37,11 +46,26 @@ async function getAllBooks(req,res,next){
    
         
             
-            const { books,totalBooks } = await getAllBooksService(filters, sortBy,skip, limit);
+            const { books,totalBooks } = await getAllBooksService(filters, sortBy,skip, limit,searchTerm);
             const totalPages = Math.ceil(totalBooks / limit)
-            
+            const paginationRange = getPaginationRange(page, totalPages);            
+           res.status(200).render('library', {
+            title: 'Library — ShelfSpace',
+            stylesheet: '/css/library.css',
+            script: '/js/library.js',
+            activePage: 'library',
+            books,
+            totalBooks,
+            totalPages,
+            currentPage: page,
+            limit,
+            paginationRange,
+            selectedGenre: req.query.genre || '',
+            genres,
+            selectedAuthor: req.query.author || ''
+        });
 
-            res.status(200).json({ books, totalBooks, totalPages, currentPage:page ,limit});
+
         
     }catch (err) {
         next(err);

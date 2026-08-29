@@ -1,0 +1,30 @@
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+
+      <!-- Logo — links to library root -->
+      <a href="/" class="site-logo" aria-label="ShelfSpace — go to home">
+        <!-- CSS-drawn book-spine marks -->
+        <span class="site-logo__mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </span>
+        <span class="site-logo__text">Shelf<em>Space</em></span>
+      </a>
+
+      <!-- Primary navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul class="site-nav__list" role="list">
+          <li>
+            <!-- aria-current="page" marks the active route for screen readers -->
+         <a href="/" class="site-nav__link <% if (activePage === 'library') { %>is-active<% } %>">
+  Library </a>
+          </li>
+          <li>
+            <!-- JS can attach a click handler or this can be a real href -->
+            <a href="/upload" class="site-nav__link <% if (activePage === 'upload') { %>is-active<% } %>">
+  Upload Book </a>
+          </li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>

@@ -1,0 +1,16 @@
+<div id="delete-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-icon" aria-hidden="true">🗑️</div>
+      <h2 id="modal-title" class="modal-title">Delete this book?</h2>
+      <p class="modal-warning">
+        This will permanently remove the book and its associated file from ShelfSpace.
+        This action cannot be undone.
+      </p>
+      <div class="modal-actions">
+        <!-- JS: Attach click handler to close the modal -->
+        <button id="cancel-delete-btn" class="btn btn--secondary">Keep Book</button>
+        <!-- JS: Attach click handler to call DELETE /api/books/:id -->
+        <button id="confirm-delete-btn" class="btn btn--danger">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
