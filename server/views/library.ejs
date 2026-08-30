@@ -108,29 +108,35 @@
 
       <!-- Genre filter -->
       <label for="filter-genre" class="sr-only">Filter by genre</label>
-     <form action="/" method="get" id="filter-form">
-      <select id="filter-genre" class="form-select" name="genre">
-        <option value="">All Genres</option>
-        <% genres.forEach((genre) => { %>
-          <option value="<%= genre %>" <% if (genre === selectedGenre) { %>selected<% } %>><%= genre.charAt(0).toUpperCase() + genre.slice(1) %></option>
-        <% }) %>
-      </select>
-        <label for="filter-author" class="sr-only">Filter by author name</label>
-      <input
-        type="text"
-        value="<%= selectedAuthor %>"
-        id="filter-author"
-        class="form-input"
-        name="author"
-        placeholder="Author…"
-        aria-label="Filter by author name"
-        autocomplete="off"
-      />
-      </form>
+      <form action="/" method="get" id="filter-form" class="filter-form">
+        <select id="filter-genre" class="form-select" name="genre">
+          <option value="">All Genres</option>
+          <% genres.forEach((genre) => { %>
+            <option value="<%= genre %>" <% if (genre === selectedGenre) { %>selected<% } %>><%= genre.charAt(0).toUpperCase() + genre.slice(1) %></option>
+          <% }) %>
+        </select>
 
-      
-    
-     
+        <label for="filter-author" class="sr-only">Filter by author name</label>
+        <input
+          type="text"
+          value="<%= selectedAuthor %>"
+          id="filter-author"
+          class="form-input"
+          name="author"
+          placeholder="Author…"
+          aria-label="Filter by author name"
+          autocomplete="off"
+        />
+
+        <label for="filter-sort" class="sr-only">Sort books</label>
+        <select id="filter-sort" class="form-select" name="sortBy">
+          <option value="">Sort by</option>
+          <option value="title" <% if (selectedSort === 'title') { %>selected<% } %>>Title</option>
+          <option value="author" <% if (selectedSort === 'author') { %>selected<% } %>>Author</option>
+          <option value="publishDate" <% if (selectedSort === 'publishDate') { %>selected<% } %>>Publish Date</option>
+          <option value="genre" <% if (selectedSort === 'genre') { %>selected<% } %>>Genre</option>
+        </select>
+      </form>
 
       <!-- Clear all filters -->
       <div class="filter-toolbar__clear">
@@ -178,13 +184,19 @@
         <%books.forEach((book)=>{%>
             <li class="book-card" data-book-id="<%= book._id %>" role="listitem">
 
-          <!-- Cover placeholder — JS can replace with <img> when a cover URL exists -->
           <div class="book-card__cover" aria-hidden="true">
-            <div class="book-card__cover-placeholder cover-color-1">
-              <span class="cover-placeholder-icon">📖</span>
-              <span class="cover-placeholder-title"><%= book.title %></span>
-            </div>
-            <!-- Genre badge overlaid on the cover -->
+            <% if (book.coverImage) { %>
+              <img
+                class="book-card__cover-image"
+                src="/<%= book.coverImage.replace(/\\/g, '/').replace(/^uploads\//, 'uploads/') %>"
+                alt="<%= book.title %> cover"
+              />
+            <% } else { %>
+              <div class="book-card__cover-placeholder cover-color-1">
+                <span class="cover-placeholder-icon">📖</span>
+                <span class="cover-placeholder-title"><%= book.title %></span>
+              </div>
+            <% } %>
             <span class="book-card__genre-badge"><%= book.genre %></span>
           </div>
 
@@ -330,8 +342,7 @@
       <% } %>     
    
 
-      <!-- Page number buttons — JS will generate these dynamically;
-           these are static examples showing the pattern -->
+      <!-- Page number buttons are generated from the current result set. -->
       <% paginationRange.pages.forEach((page) => { %>
         <a
           href="?page=<%= page %>"

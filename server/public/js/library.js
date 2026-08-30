@@ -1,5 +1,6 @@
 const filterForm = document.getElementById('filter-form');
 const dropDown = document.getElementById('filter-genre');
+const sortDropdown = document.getElementById('filter-sort');
 
 const deleteBookBtns = document.querySelectorAll('.delete-book-btn');
 const deleteModal = document.getElementById('delete-modal');
@@ -16,10 +17,17 @@ let selectedBookId = null;
 
 
 // Genre filter
-dropDown.addEventListener('change', function () {
-    filterForm.submit();
-});
+if (dropDown) {
+    dropDown.addEventListener('change', function () {
+        filterForm.submit();
+    });
+}
 
+if (sortDropdown) {
+    sortDropdown.addEventListener('change', function () {
+        filterForm.submit();
+    });
+}
 
 // Open delete modal
 deleteBookBtns.forEach((btn) => {

@@ -92,6 +92,21 @@
     <section class="book-details-section card" aria-labelledby="book-title">
       <div class="book-details-grid">
 
+        <div class="book-cover-column">
+          <% if (book.coverImage) { %>
+            <img
+              class="book-cover-image"
+              src="/<%= book.coverImage.replace(/\\/g, '/').replace(/^uploads\//, 'uploads/') %>"
+              alt="<%= book.title %> cover"
+            />
+          <% } else { %>
+            <div class="book-cover-placeholder">
+              <span>📖</span>
+              <strong><%= book.title %></strong>
+            </div>
+          <% } %>
+        </div>
+
         <div class="book-info-column">
            <div class="genre-badge-row">
             <span id="book-genre-badge" class="genre-badge"> <%= book.genre %></span>
@@ -154,9 +169,7 @@
               </button>
 
               <!-- JS: Clicking this should show #delete-modal -->
-              <button id="delete-book-btn" class="btn btn--danger" 
-                      data-book-id="<%= book._id %>"
-                      
+              <button id="delete-book-btn" class="btn btn--danger" data-book-id="<%= book._id %>">
                 <span class="btn-icon" aria-hidden="true">🗑️</span>
                 Delete
               </button>

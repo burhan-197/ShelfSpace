@@ -29,7 +29,7 @@
          to attach a submit listener and run FormData handling.
     ========================================================== -->
     <section class="card form-card">
-      <form id="upload-book-form" class="upload-form" novalidate>
+      <form id="upload-book-form" class="upload-form" novalidate method="post" enctype="multipart/form-data" action="/books">
 
         <!-- General form-level error banner.
              JS-hook: id="form-error-message"
@@ -61,7 +61,7 @@
               id="book-title"
               name="title"
               class="form-input"
-              placeholder="e.g. The Midnight Library"
+              placeholder="Enter book title"
               autocomplete="off"
               required
               aria-describedby="book-title-error"
@@ -80,7 +80,7 @@
               id="book-author"
               name="author"
               class="form-input"
-              placeholder="e.g. Matt Haig"
+              placeholder="Enter author name"
               autocomplete="off"
               required
               aria-describedby="book-author-error"
@@ -127,7 +127,7 @@
               id="book-pages"
               name="pages"
               class="form-input"
-              placeholder="e.g. 312"
+              placeholder="Enter page count"
               min="1"
               step="1"
               inputmode="numeric"
@@ -165,7 +165,6 @@
         ------------------------------------------------------ -->
         <div class="form-grid form-grid--uploads">
 
-         
           <!-- Book file upload (reader file) -->
           <div class="form-field">
             <label for="book-file" class="form-label">
@@ -175,8 +174,6 @@
             <label for="book-file" class="upload-zone">
               <span class="upload-zone__icon" aria-hidden="true">📄</span>
               <span class="upload-zone__title">Click to choose a book file</span>
-              <!-- Explicit note that only PDF is supported in the
-                   first reader version -->
               <span class="upload-zone__hint">
                 Currently supported format: <strong>PDF only</strong> · Max 50MB
               </span>
@@ -190,8 +187,31 @@
                 aria-describedby="book-file-error"
               >
             </label>
-            <!-- JS-hook: id="book-file-error" -->
             <p id="book-file-error" class="field-error"></p>
+          </div>
+
+          <!-- Cover image upload -->
+          <div class="form-field">
+            <label for="book-cover" class="form-label">
+              Cover Image
+            </label>
+
+            <label for="book-cover" class="upload-zone">
+              <span class="upload-zone__icon" aria-hidden="true">🖼️</span>
+              <span class="upload-zone__title">Choose a cover image</span>
+              <span class="upload-zone__hint">
+                JPG, PNG, WEBP · Max 5MB
+              </span>
+              <input
+                type="file"
+                id="book-cover"
+                name="coverImage"
+                class="upload-zone__input"
+                accept="image/*"
+                aria-describedby="book-cover-error"
+              >
+            </label>
+            <p id="book-cover-error" class="field-error"></p>
           </div>
 
         </div><!-- /.form-grid--uploads -->

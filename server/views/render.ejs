@@ -2,17 +2,6 @@
 
     <!-- =========================================================
          SHELFSPACE PDF READER
-         ---------------------------------------------------------
-         This page contains ONLY the HTML structure for the reader.
-
-         Future JavaScript/PDF.js will:
-         - Load the uploaded PDF.
-         - Render pages inside #pdf-viewer.
-         - Change pages using the previous/next controls.
-         - Update the current page and total page count.
-         - Control zoom.
-         - Handle fullscreen mode.
-         - Toggle loading/error/empty states.
          ========================================================= -->
 
 
@@ -27,11 +16,8 @@
         -->
         <div class="toolbar-section toolbar-left">
 
-            <!-- FUTURE JS:
-                 This button will return the user to the current
-                 book's detail page.
-            -->
-            <button
+            <a
+                href="/details/<%= book._id %>"
                 id="back-to-book-btn"
                 class="reader-btn back-btn"
                 type="button"
@@ -40,7 +26,7 @@
             >
                 <span aria-hidden="true">←</span>
                 <span class="back-btn-text">Back</span>
-            </button>
+        </a>
 
 
             <!-- Small ShelfSpace branding -->
@@ -57,16 +43,12 @@
             </a>
 
 
-            <!-- FUTURE JS:
-                 JavaScript can replace this text with the actual
-                 title of the book being read.
-            -->
             <div
                 id="reader-book-title"
                 class="reader-book-title"
                 title="Current book title"
             >
-                The Great Example Book
+                <%= book.title %>
             </div>
 
         </div>
@@ -80,9 +62,6 @@
             aria-label="Page navigation"
         >
 
-            <!-- FUTURE JS:
-                 Moves to the previous PDF page.
-            -->
             <button
                 id="previous-page-btn"
                 class="reader-btn icon-btn"
@@ -134,15 +113,12 @@
                     class="total-pages"
                     aria-label="Total pages"
                 >
-                    248
+                    —
                 </span>
 
             </div>
 
 
-            <!-- FUTURE JS:
-                 Moves to the next PDF page.
-            -->
             <button
                 id="next-page-btn"
                 class="reader-btn icon-btn"
@@ -164,9 +140,6 @@
             aria-label="Reader display controls"
         >
 
-            <!-- FUTURE JS:
-                 Decreases PDF zoom level.
-            -->
             <button
                 id="zoom-out-btn"
                 class="reader-btn icon-btn"
@@ -178,9 +151,6 @@
             </button>
 
 
-            <!-- FUTURE JS:
-                 Displays the current PDF zoom percentage.
-            -->
             <output
                 id="zoom-level"
                 class="zoom-level"
@@ -190,9 +160,6 @@
             </output>
 
 
-            <!-- FUTURE JS:
-                 Increases PDF zoom level.
-            -->
             <button
                 id="zoom-in-btn"
                 class="reader-btn icon-btn"
@@ -204,10 +171,6 @@
             </button>
 
 
-            <!-- FUTURE JS:
-                 Adjusts the document scale so the current page
-                 fits the available reader width.
-            -->
             <button
                 id="fit-width-btn"
                 class="reader-btn toolbar-text-btn"
@@ -219,9 +182,6 @@
             </button>
 
 
-            <!-- FUTURE JS:
-                 Toggles fullscreen reader mode.
-            -->
             <button
                 id="fullscreen-btn"
                 class="reader-btn icon-btn fullscreen-btn"
@@ -246,10 +206,6 @@
 
         <!-- =====================================================
              OPTIONAL LEFT SIDEBAR
-             -----------------------------------------------------
-             Future JavaScript may make this sidebar collapsible
-             and populate it with real PDF thumbnails or a
-             table of contents.
              ===================================================== -->
         <aside
             id="reader-sidebar"
@@ -264,10 +220,6 @@
                 </h2>
 
 
-                <!-- FUTURE JS:
-                     Optional control for hiding/showing the
-                     sidebar. No collapse functionality exists yet.
-                -->
                 <button
                     id="sidebar-toggle-btn"
                     class="sidebar-toggle-btn"
@@ -302,10 +254,6 @@
             </div>
 
 
-            <!-- FUTURE JS:
-                 This area can be replaced/populated with actual
-                 PDF page thumbnails.
-            -->
             <div
                 id="thumbnail-list"
                 class="thumbnail-list"
@@ -407,17 +355,8 @@
 
             <!-- =================================================
                  READER STATES
-                 -------------------------------------------------
-                 These states are hidden by default.
-
-                 Future JavaScript can show/hide them depending
-                 on the state of the PDF.
                  ================================================= -->
 
-
-            <!-- FUTURE JS:
-                 Show while the PDF is being fetched/rendered.
-            -->
             <div
                 id="pdf-loading-state"
                 class="reader-state"
@@ -437,9 +376,6 @@
             </div>
 
 
-            <!-- FUTURE JS:
-                 Show when the PDF failed to load.
-            -->
             <div
                 id="pdf-error-state"
                 class="reader-state"
@@ -463,9 +399,6 @@
             </div>
 
 
-            <!-- FUTURE JS:
-                 Show when the selected book has no PDF attached.
-            -->
             <div
                 id="no-pdf-state"
                 class="reader-state"
@@ -487,96 +420,11 @@
                 </p>
             </div>
 
-
-
-            <!-- =================================================
-                 PDF VIEWER
-                 -------------------------------------------------
-                 THIS IS THE IMPORTANT FUTURE PDF RENDERING AREA.
-
-                 Future JavaScript/PDF.js should render PDF pages
-                 inside #pdf-viewer.
-
-                 The sample page below exists ONLY to show the
-                 appearance of the reader before JavaScript is
-                 implemented.
-                 ================================================= -->
             <div
                 id="pdf-viewer"
                 class="pdf-viewer"
-            >
-
-
-                <!-- SAMPLE PDF PAGE PLACEHOLDER
-                     Remove or replace this when PDF.js begins
-                     rendering real PDF pages.
-                -->
-                <article
-                    id="sample-pdf-page"
-                    class="pdf-page sample-pdf-page"
-                    aria-label="Sample PDF page"
-                >
-
-                    <div class="sample-document-content">
-
-                        <span class="sample-chapter">
-                            CHAPTER ONE
-                        </span>
-
-                        <h1>
-                            A Quiet Beginning
-                        </h1>
-
-                        <p class="sample-opening">
-                            Books have always carried more than words.
-                            They preserve ideas, memories and worlds
-                            waiting quietly for someone to open them.
-                        </p>
-
-                        <p>
-                            The morning light stretched across the old
-                            library floor, touching the shelves one by
-                            one. Dust moved slowly through the narrow
-                            beams of sunlight while the room remained
-                            almost completely silent.
-                        </p>
-
-                        <p>
-                            Somewhere between the rows of forgotten
-                            books rested a volume that had not been
-                            opened for many years. Its cover had faded,
-                            its pages had yellowed, but the story inside
-                            remained exactly where its last reader had
-                            left it.
-                        </p>
-
-                        <p>
-                            A hand reached toward the shelf and carefully
-                            pulled the book free. For a moment, nothing
-                            happened. Then the cover opened.
-                        </p>
-
-                        <blockquote>
-                            Some stories wait patiently until the right
-                            reader finds them.
-                        </blockquote>
-
-                        <p>
-                            The first page turned with a soft rustle.
-                            The library disappeared, and another world
-                            began.
-                        </p>
-
-                    </div>
-
-
-                    <span class="sample-page-number">
-                        1
-                    </span>
-
-                </article>
-
-            </div>
+                 data-pdf-url="/books/<%= book._id %>/file"
+            ></div>
 
         </section>
 
@@ -635,7 +483,7 @@
                 id="mobile-total-pages"
                 class="mobile-total-pages"
             >
-                248
+                —
             </span>
 
         </div>

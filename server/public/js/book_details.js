@@ -58,7 +58,6 @@ editForm.addEventListener('submit', async (e) => {
 
     const bookId = editBookBtn.dataset.bookId;
 
-    console.log('EDIT BOOK ID:', bookId);
     const formData = new FormData(editForm);
 
     

@@ -13,8 +13,10 @@ const {getAllBooksRouter}=require('./routes/getallbooks.router')
 const {getBookByIdRouter}=require('./routes/getbookbyid.router')
 const {updateBookRouter}=require('./routes/updatebook.router')
 const {deleteBookRouter}=require('./routes/deletebookbyid.router')
+const {renderBookRouter}=require('./routes/renderbook.router')
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layout');
@@ -23,6 +25,11 @@ app.use(getBookByIdRouter)
 app.use(getAllBooksRouter)
 app.use(updateBookRouter)
 app.use(deleteBookRouter)
+app.use(renderBookRouter)
+app.use(
+  '/pdfjs',
+  express.static('node_modules/pdfjs-dist/build')
+);
 app.use(errorHandler)
 
 
@@ -37,15 +44,7 @@ app.get('/upload', (req, res) => {
 });
 
 
-app.get('/reader/:id', (req, res) => {
-    res.render('render', {
-        layout: 'render-layout',
-        title: 'Reader — ShelfSpace',
-        stylesheet: '/css/reader.css',
-        script: '/js/reader.js',
-        
-    });
-})
+
 mongoose.connection.once('open',()=>{
     console.log('MongoDB connection ready!')
 })
