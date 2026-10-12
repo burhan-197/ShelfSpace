@@ -1,5 +1,3 @@
-@import url("../css/global.css");
-@import url("../css/components.css");
 
 :root {
   --max-content-width: 960px;
@@ -25,7 +23,9 @@
 .page-heading__title {
   margin: 0 0 8px;
   font-size: 2rem;
-  color: var(--color-primary);
+  font-family: var(--font-serif);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
 .page-heading__subtitle {
@@ -41,7 +41,8 @@
 .form-card {
   max-width: var(--max-form-width);
   margin: 0 auto;
-  padding: 32px;
+  padding: 36px;
+  box-shadow: var(--shadow-md);
 }
 
 /* ============================================================
@@ -94,6 +95,29 @@
   background-color: rgba(199, 147, 70, 0.06);
 }
 
+/* States set by upload.js once a file is chosen */
+.upload-zone.is-selected {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background-color: rgba(36, 70, 58, 0.05);
+}
+
+.upload-zone.is-selected .upload-zone__title {
+  color: var(--color-primary);
+  word-break: break-all;
+  max-width: 100%;
+}
+
+.upload-zone.is-invalid {
+  border-style: solid;
+  border-color: var(--color-danger);
+  background-color: rgba(181, 71, 71, 0.05);
+}
+
+.upload-zone.is-invalid .upload-zone__title {
+  color: var(--color-danger);
+}
+
 .upload-zone__icon {
   font-size: 1.8rem;
   margin-bottom: 4px;
@@ -141,6 +165,10 @@
    Hidden by default via [hidden]; JS can hide .btn__label and
    reveal .btn__loading while the upload request is in flight. */
 .btn__loading[hidden] {
+  display: none;
+}
+
+.btn__label[hidden] {
   display: none;
 }
 

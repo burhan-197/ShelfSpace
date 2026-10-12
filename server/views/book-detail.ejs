@@ -101,8 +101,9 @@
             />
           <% } else { %>
             <div class="book-cover-placeholder">
-              <span>📖</span>
+              <span class="cover-placeholder-spine" aria-hidden="true"></span>
               <strong><%= book.title %></strong>
+              <span class="cover-placeholder-author"><%= book.author %></span>
             </div>
           <% } %>
         </div>
@@ -133,7 +134,7 @@
             <div class="meta-pair">
               <dt class="meta-label">Published</dt>
               <!-- JS: Populate with a formatted version of book.publishDate -->
-              <dd id="book-publish-date" class="meta-value"><%= book.publishDate %></dd>
+              <dd id="book-publish-date" class="meta-value"><%= new Date(book.publishDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></dd>
             </div>
             <div class="meta-pair">
               <dt class="meta-label">Pages</dt>
@@ -221,13 +222,3 @@
     </section>
 
   </main>
-
-  <!-- ============================================================
-       SITE FOOTER
-       ============================================================ -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <span class="footer-logo">📚 ShelfSpace</span>
-      <p class="footer-copy">&copy; 2026 ShelfSpace. Your personal digital library.</p>
-    </div>
-  </footer>

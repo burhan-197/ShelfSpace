@@ -14,6 +14,8 @@ const {getBookByIdRouter}=require('./routes/getbookbyid.router')
 const {updateBookRouter}=require('./routes/updatebook.router')
 const {deleteBookRouter}=require('./routes/deletebookbyid.router')
 const {renderBookRouter}=require('./routes/renderbook.router')
+const {apiRouter}=require('./routes/api/v1/api.router')
+const {swaggerDocsRouter}=require('./swagger')
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -26,6 +28,9 @@ app.use(getAllBooksRouter)
 app.use(updateBookRouter)
 app.use(deleteBookRouter)
 app.use(renderBookRouter)
+// Versioned REST API (JSON) + interactive docs
+app.use('/api/v1',apiRouter)
+app.use('/api/docs',swaggerDocsRouter)
 app.use(
   '/pdfjs',
   express.static('node_modules/pdfjs-dist/build')
@@ -54,8 +59,16 @@ mongoose.connection.on('error',(err)=>{
 })
 
 async function startServer(){
-    await mongoose.connect(process.env.MONGO_URI) 
-  
+    if (process.env.SKIP_DB === '1') {
+        console.log('SKIP_DB=1 — starting without MongoDB. API routes that need the database will answer 503.');
+    } else {
+        if (!process.env.MONGO_URI) {
+            console.error('FATAL: MONGO_URI is not set. Copy .env.example to .env and fill in your MongoDB connection string.');
+            process.exit(1);
+        }
+        await mongoose.connect(process.env.MONGO_URI)
+    }
+
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT,()=>{

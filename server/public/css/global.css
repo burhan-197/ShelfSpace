@@ -12,6 +12,7 @@
     /* Surfaces */
     --color-surface: #FFFDFC;
     --color-border: #DED8CC;
+    --color-input-bg: #FBFAF6;
 
     /* Status */
     --color-danger: #B54747;
@@ -29,6 +30,7 @@
     /* Typography */
     --font-serif: Georgia, "Times New Roman", serif;
     --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-sans: var(--font-ui);
 
     /* Shared layout */
     --header-height: 64px;
@@ -53,10 +55,17 @@ html {
 
 body {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-ui);
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background-color: rgba(199, 147, 70, 0.28);
 }
 
 a {
@@ -87,6 +96,19 @@ img {
 
 .hidden {
     display: none !important;
+}
+
+/* Screen-reader only utility — visually hidden, still announced */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 :focus-visible {

@@ -105,3 +105,35 @@ editForm.addEventListener('submit', async (e) => {
         window.location.reload();
     }
 });
+// ── Search: repopulate from ?q=, toggle the clear button ──
+(function initSearch() {
+    const searchInput = document.getElementById('book-search');
+    const searchClear = document.getElementById('search-clear');
+    if (!searchInput || !searchClear) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) searchInput.value = q;
+
+    const toggleClear = () => {
+        searchClear.style.visibility = searchInput.value ? 'visible' : 'hidden';
+    };
+    searchInput.addEventListener('input', toggleClear);
+    toggleClear();
+
+    searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        toggleClear();
+        searchInput.focus();
+    });
+})();
+
+// ── Pagination: keep current search/filters when changing pages ──
+(function preservePaginationParams() {
+    const current = new URLSearchParams(window.location.search);
+    document.querySelectorAll('.pagination__btn[data-page]').forEach((btn) => {
+        const params = new URLSearchParams(current);
+        params.set('page', btn.dataset.page);
+        btn.href = '?' + params.toString();
+    });
+})();

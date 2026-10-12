@@ -1,2 +1,4 @@
 .env
 node_modules
+# Uploaded PDFs stay local (large binaries); the uploads/ dir itself is kept via .gitkeep
+uploads/*.pdf

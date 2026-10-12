@@ -14,6 +14,12 @@
        ============================================================ -->
   <main class="main-content" id="main" role="main">
 
+    <% if (typeof dbNotice !== 'undefined' && dbNotice) { %>
+      <div class="status-banner status-banner--error" role="alert">
+        <%= dbNotice %>
+      </div>
+    <% } %>
+
  <%- include('partials/delete-modal') %>
   <%- include('partials/edit-modal') %>
     <!-- ============================================================
@@ -22,9 +28,13 @@
     <section class="library-hero" aria-labelledby="library-heading">
 
       <div class="library-hero__text">
+        <p class="library-hero__eyebrow">Personal digital library</p>
         <h1 class="library-hero__heading" id="library-heading">Your Library</h1>
         <p class="library-hero__subtitle">
           Browse, search, and manage all your uploaded books in one place.
+          <% if (totalBooks > 0) { %>
+            <span class="library-hero__stat"><%= totalBooks %> <%= totalBooks === 1 ? 'book' : 'books' %> on your shelves</span>
+          <% } %>
         </p>
       </div>
 
@@ -181,7 +191,7 @@
       <% if(books.length===0){%>
         <p>No books found</p>
       <% }else{ %>
-        <%books.forEach((book)=>{%>
+        <%books.forEach((book, i)=>{%>
             <li class="book-card" data-book-id="<%= book._id %>" role="listitem">
 
           <div class="book-card__cover" aria-hidden="true">
@@ -192,9 +202,10 @@
                 alt="<%= book.title %> cover"
               />
             <% } else { %>
-              <div class="book-card__cover-placeholder cover-color-1">
-                <span class="cover-placeholder-icon">📖</span>
+              <div class="book-card__cover-placeholder cover-color-<%= (i % 6) + 1 %>">
+                <span class="cover-placeholder-spine" aria-hidden="true"></span>
                 <span class="cover-placeholder-title"><%= book.title %></span>
+                <span class="cover-placeholder-author"><%= book.author %></span>
               </div>
             <% } %>
             <span class="book-card__genre-badge"><%= book.genre %></span>
@@ -204,8 +215,9 @@
             <h2 class="book-card__title"><%= book.title %></h2>
             <p class="book-card__author"><%= book.author %></p>
             <div class="book-card__meta">
-              <span class="book-card__meta-item">📅 <%= book.publishDate %></span>
-              <span class="book-card__meta-item">📄 <%= book.pages %> pp.</span>
+              <span class="book-card__meta-item"><%= new Date(book.publishDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+              <span class="book-card__meta-sep" aria-hidden="true">·</span>
+              <span class="book-card__meta-item"><%= book.pages %> pages</span>
             </div>
           </div>
 
@@ -394,33 +406,5 @@
     <!-- END PAGINATION -->
 
 
-       
-      </button>
-      
-    </nav>
-    <!-- END PAGINATION -->
-
-
   </main>
   <!-- END MAIN CONTENT -->
-
-
-  <!-- ============================================================
-       SCREEN-READER ONLY UTILITY CLASS
-       Add .sr-only to labels that visually appear elsewhere but
-       need to exist in the DOM for accessibility.
-       ============================================================ -->
-  <style>
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-  </style>
- 

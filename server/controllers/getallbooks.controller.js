@@ -1,25 +1,37 @@
 const { getAllBooksService } = require('../services/getallbooks.service');
 const getPaginationRange = require('../utils/getPaginationRange');
-
-const genres = [
-  'fiction',
-  'non-fiction',
-  'fantasy',
-  'sci-fi',
-  'mystery',
-  'romance',
-  'biography',
-  'history',
-  'self-help',
-  'other'
-];
+const mongoose = require('mongoose');
+const {
+  ALLOWED_GENRES: genres,
+  PAGE_ALLOWED_QUERY_PARAMS: allowedQueryParams,
+  ALLOWED_FILTERS: allowedFilters,
+  ALLOWED_SORT_VALUES: allowedSortByValues
+} = require('../utils/api.constants');
 
 async function getAllBooks(req, res, next) {
-  const allowedQueryParams = ['author', 'title', 'genre', 'sortBy', 'page', 'limit', 'q'];
-  const allowedFilters = ['author', 'title', 'genre'];
-  const allowedSortByValues = ['title', 'author', 'genre', 'publishDate'];
-
   try {
+    // Graceful degradation when the server runs without a database
+    // (SKIP_DB=1): show an empty library instead of a 500 error.
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(200).render('library', {
+        title: 'Library — ShelfSpace',
+        stylesheet: '/css/library.css',
+        script: '/js/library.js',
+        activePage: 'library',
+        books: [],
+        totalBooks: 0,
+        totalPages: 0,
+        currentPage: 1,
+        limit: 10,
+        paginationRange: getPaginationRange(1, 0),
+        selectedGenre: '',
+        selectedAuthor: '',
+        selectedSort: '',
+        genres,
+        dbNotice: 'Database is not connected — the library is shown empty.'
+      });
+    }
+
     const queryParams = req.query;
     const searchTerm = queryParams.q;
 

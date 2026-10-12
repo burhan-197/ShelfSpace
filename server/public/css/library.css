@@ -1,5 +1,3 @@
-@import url("../css/global.css");
-@import url("../css/components.css");
 
 /* ============================================================
    ShelfSpace — library.css
@@ -23,21 +21,62 @@
   gap: 1.5rem;
   margin-bottom: var(--gap-section);
   flex-wrap: wrap;
+  position: relative;
+  padding: 2.25rem 2.5rem;
+  background:
+    radial-gradient(1200px 300px at 15% -20%, rgba(199, 147, 70, 0.14), transparent 60%),
+    linear-gradient(180deg, var(--color-surface) 0%, rgba(255, 253, 252, 0.4) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.library-hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--color-gold), var(--color-primary));
+}
+
+.library-hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
 }
 
 .library-hero__heading {
   font-family: var(--font-serif);
-  font-size: 2.1rem;
+  font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 700;
   color: var(--color-text);
-  line-height: 1.2;
-  margin-bottom: .45rem;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
 }
 
 .library-hero__subtitle {
   color: var(--color-text-secondary);
-  font-size: .97rem;
+  font-size: 0.97rem;
   max-width: 48ch;
+}
+
+.library-hero__stat {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.3rem 0.75rem;
+  background-color: rgba(36, 70, 58, 0.07);
+  border: 1px solid rgba(36, 70, 58, 0.15);
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .library-hero__actions {
@@ -289,24 +328,67 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.35rem;
   font-family: var(--font-serif);
-  font-style: italic;
-  font-size: .75rem;
-  color: rgba(255,255,255,.6);
-  text-align: center;
-  padding: 1rem;
+  text-align: left;
+  padding: 1.1rem;
   position: relative;
 }
 
+/* Faux book spine running down the left edge */
 .book-card__cover-placeholder::before {
   content: '';
   position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(255,255,255,.2);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: inset -2px 0 3px rgba(0, 0, 0, 0.25);
+}
+
+.book-card__cover-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 8px 8px 8px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 2px;
+  pointer-events: none;
+}
+
+.cover-placeholder-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.cover-placeholder-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-left: 12px;
+}
+
+.cover-placeholder-author {
+  font-size: 0.72rem;
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.65);
+  margin-left: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .cover-color-1 { background-color: #2d5a45; }
@@ -324,10 +406,15 @@
   text-align: center;
 }
 
-.cover-placeholder-icon {
-  font-size: 2rem;
-  opacity: .35;
-  margin-bottom: .25rem;
+.book-card__cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.book-card:hover .book-card__cover-image {
+  transform: scale(1.045);
 }
 
 .book-card__genre-badge {
@@ -376,7 +463,7 @@
 .book-card__meta {
   display: flex;
   align-items: center;
-  gap: .6rem;
+  gap: .45rem;
   margin-top: .35rem;
   font-size: .78rem;
   color: var(--color-text-secondary);
@@ -386,6 +473,11 @@
   display: flex;
   align-items: center;
   gap: .25rem;
+}
+
+.book-card__meta-sep {
+  color: var(--color-gold);
+  font-weight: 700;
 }
 
 .book-card__actions {

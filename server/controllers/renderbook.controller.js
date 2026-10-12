@@ -1,5 +1,5 @@
 const { getBookByIdService } = require('../services/getbookbyid.service');
-const path = require('path');
+const { getBookFileService } = require('../services/bookfile.service');
 async function renderBook(req, res, next) {
     const { id } = req.params;
 
@@ -22,10 +22,8 @@ async function serveBookFile(req, res, next) {
     const { id } = req.params;
 
     try {
-        const book = await getBookByIdService(id);
-const absolutePath = path.join(__dirname, '..', book.filePath);
-res.sendFile(absolutePath);
-
+        const { absolutePath } = await getBookFileService(id);
+        res.sendFile(absolutePath);
     } catch (err) {
         next(err);
     }
