@@ -45,7 +45,7 @@ The page routes and the REST API share the same service layer, so business rules
 ├── views/                      # EJS templates
 ├── public/                     # CSS + client JS
 ├── scripts/
-│   ├── seed.js                 # seeds 8 public-domain classics
+│   ├── seed.js                 # seeds 20 demo books
 │   └── smoke.js                # smoke test (runs via `npm test`)
 └── uploads/                    # uploaded PDFs/covers (gitignored, except .gitkeep)
 ```
@@ -55,7 +55,7 @@ The page routes and the REST API share the same service layer, so business rules
 ```bash
 npm install
 cp .env.example .env        # then set MONGO_URI
-npm run seed                # optional: loads 8 demo books
+npm run seed                # optional: loads 20 demo books
 npm start                   # http://localhost:8000
 ```
 

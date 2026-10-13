@@ -32,10 +32,10 @@
         <h1 class="library-hero__heading" id="library-heading">Your Library</h1>
         <p class="library-hero__subtitle">
           Browse, search, and manage all your uploaded books in one place.
-          <% if (totalBooks > 0) { %>
-            <span class="library-hero__stat"><%= totalBooks %> <%= totalBooks === 1 ? 'book' : 'books' %> on your shelves</span>
-          <% } %>
         </p>
+        <% if (totalBooks > 0) { %>
+          <p class="library-hero__stat"><%= totalBooks %> <%= totalBooks === 1 ? 'book' : 'books' %> on your shelves</p>
+        <% } %>
       </div>
 
       <div class="library-hero__actions">

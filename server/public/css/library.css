@@ -69,7 +69,7 @@
 
 .library-hero__stat {
   display: inline-block;
-  margin-top: 0.6rem;
+  margin: 0.7rem 0 0;
   padding: 0.3rem 0.75rem;
   background-color: rgba(36, 70, 58, 0.07);
   border: 1px solid rgba(36, 70, 58, 0.15);
@@ -201,6 +201,15 @@
   margin-right: .25rem;
 }
 
+.filter-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
 .filter-toolbar .form-select,
 .filter-toolbar .form-input {
   appearance: none;
@@ -208,13 +217,24 @@
   background-color: var(--color-bg);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: .48rem .85rem;
+  padding: .55rem .85rem;
   font-size: .88rem;
   font-family: var(--font-ui);
   color: var(--color-text);
-  cursor: pointer;
   transition: border-color .18s, box-shadow .18s;
-  min-width: 130px;
+}
+
+.filter-toolbar .form-select {
+  flex: 0 0 auto;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.filter-toolbar .form-input {
+  flex: 1 1 160px;
+  min-width: 140px;
+  max-width: 300px;
+  cursor: text;
 }
 
 .filter-toolbar .form-select {

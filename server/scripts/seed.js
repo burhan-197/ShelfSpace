@@ -1,4 +1,4 @@
-// Seeds the library with 8 public-domain classics so the app is demo-ready.
+// Seeds the library with 20 demo books so the app is demo-ready.
 // Usage: npm run seed   (requires MONGO_URI in .env)
 //
 // The PDFs themselves are NOT included in the repo — filePath is a placeholder
@@ -17,7 +17,19 @@ const books = [
   { title: 'Dracula', author: 'Bram Stoker', pages: 418, publishDate: '1897-05-26', genre: 'mystery', filePath: 'uploads/dracula.pdf' },
   { title: 'Jane Eyre', author: 'Charlotte Brontë', pages: 507, publishDate: '1847-10-16', genre: 'fiction', filePath: 'uploads/jane-eyre.pdf' },
   { title: 'Wuthering Heights', author: 'Emily Brontë', pages: 342, publishDate: '1847-12-01', genre: 'fiction', filePath: 'uploads/wuthering-heights.pdf' },
-  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', pages: 180, publishDate: '1925-04-10', genre: 'fiction', filePath: 'uploads/the-great-gatsby.pdf' }
+  { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', pages: 180, publishDate: '1925-04-10', genre: 'fiction', filePath: 'uploads/the-great-gatsby.pdf' },
+  { title: 'The Clockwork Orchard', author: 'Mara Ellison', pages: 368, publishDate: '2020-03-12', genre: 'fantasy', filePath: 'uploads/the-clockwork-orchard.pdf' },
+  { title: 'Signals from Europa', author: 'Darius Vale', pages: 294, publishDate: '2021-07-08', genre: 'sci-fi', filePath: 'uploads/signals-from-europa.pdf' },
+  { title: 'The Last Mapmaker', author: 'Nadia Reyes', pages: 416, publishDate: '2019-09-21', genre: 'other', filePath: 'uploads/the-last-mapmaker.pdf' },
+  { title: 'A Garden of Small Miracles', author: 'Elena Brooks', pages: 256, publishDate: '2022-05-17', genre: 'romance', filePath: 'uploads/a-garden-of-small-miracles.pdf' },
+  { title: 'The Quiet Detective', author: 'Jonah Mercer', pages: 331, publishDate: '2018-11-03', genre: 'mystery', filePath: 'uploads/the-quiet-detective.pdf' },
+  { title: 'Letters from the North', author: 'Amara Okafor', pages: 224, publishDate: '2023-01-26', genre: 'history', filePath: 'uploads/letters-from-the-north.pdf' },
+  { title: 'The Daily Reset', author: 'Priya Shah', pages: 192, publishDate: '2021-02-15', genre: 'self-help', filePath: 'uploads/the-daily-reset.pdf' },
+  { title: 'Beyond the Summit', author: 'Caleb Hart', pages: 287, publishDate: '2017-06-30', genre: 'biography', filePath: 'uploads/beyond-the-summit.pdf' },
+  { title: 'Understanding the Tides', author: 'Dr. Lila Morgan', pages: 340, publishDate: '2020-10-09', genre: 'non-fiction', filePath: 'uploads/understanding-the-tides.pdf' },
+  { title: 'The Ember Crown', author: 'Soren Whitaker', pages: 512, publishDate: '2022-08-19', genre: 'fantasy', filePath: 'uploads/the-ember-crown.pdf' },
+  { title: 'Midnight at Meridian Station', author: 'Tessa Nguyen', pages: 276, publishDate: '2024-04-02', genre: 'sci-fi', filePath: 'uploads/midnight-at-meridian-station.pdf' },
+  { title: 'The Art of Starting Again', author: 'Marcus Bell', pages: 208, publishDate: '2023-09-14', genre: 'self-help', filePath: 'uploads/the-art-of-starting-again.pdf' }
 ];
 
 async function main() {
